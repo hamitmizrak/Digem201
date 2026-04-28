@@ -28,18 +28,19 @@ import csv
 # Bu sayede HTML raporunda soru ve şık metinleri güvenli şekilde gösterilir.
 import html
 
+
 # random modülü:
 # Rastgelelik gerektiren işlemlerde kullanılır.
 # Bu projede soru listesini her quiz başlangıcında karıştırmak için kullanılır.
 # Böylece her çalıştırmada sorular farklı sırada gelebilir.
 import random
 
+
 # datetime sınıfı:
 # Tarih ve saat bilgisini almak için kullanılır.
 # Burada sonuç dosyalarının isimlerini zaman damgası ile üretmek,
 # ayrıca raporlara quizin hangi tarihte oluşturulduğunu yazmak için kullanılır.
 from datetime import datetime
-
 
 
 # Path sınıfı:
