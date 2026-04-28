@@ -184,3 +184,75 @@ def load_questions(csv_file):
 
     # Tüm geçerli sorular yüklendikten sonra geri döndürülür.
     return questions
+
+
+
+# prompt_menu fonksiyonu:
+# Kullanıcıya ana menüyü gösterir ve seçim alır.
+# Geçersiz giriş yapılırsa kullanıcıyı yeniden yönlendirir.
+# Sadece 1, 2 veya 3 kabul edilir.
+def prompt_menu():
+    print("\n" + "=" * 70)
+    print("Python Quiz / Test Uygulaması")
+    print("=" * 70)
+    print("1) Quiz başlat")
+    print("2) Soru sayısını göster")
+    print("3) Çıkış")
+
+    # input ile kullanıcıdan seçim alınır.
+    # strip() ile baştaki/sondaki boşluklar temizlenir.
+    choice = input("Seçiminiz: ").strip()
+
+    # while döngüsü, geçerli bir menü seçimi yapılana kadar tekrar ister.
+    while choice not in {"1", "2", "3"}:
+        choice = input("Geçersiz seçim. Lütfen 1, 2 veya 3 girin: ").strip()
+    return choice
+
+
+# main fonksiyonu:
+# Programın giriş noktasıdır.
+# Genel akış burada yönetilir:
+# 1) Soruları yükle
+# 2) Menü göster
+# 3) Kullanıcı seçimine göre quiz başlat / soru sayısını göster / çıkış yap
+def main():
+    # Önce CSV dosyasındaki sorular yüklenir.
+    questions = load_questions(CSV_FILE)
+
+    # Eğer soru listesi boşsa program devam etmez.
+    if not questions:
+        print("Program sonlandırıldı. Soru listesi boş veya CSV hatalı.")
+        return
+
+    # Sonsuz döngü ile menü sürekli gösterilir.
+    # Kullanıcı '3' ile çıkış yapana kadar program açık kalır.
+    while True:
+        choice = prompt_menu()
+
+        # 1 seçildiyse quiz başlatılır.
+        if choice == "1":
+            score, total, user_results = run_quiz(questions)
+            txt_file, csv_file, html_file, percent = save_all_results(score, total, user_results)
+
+            show_final_summary(score, total, percent)
+            print("\nSonuç dosyaları oluşturuldu:")
+            print(f"TXT  : {txt_file}")
+            print(f"CSV  : {csv_file}")
+            print(f"HTML : {html_file}")
+
+        # 2 seçildiyse toplam soru sayısı gösterilir.
+        elif choice == "2":
+            print(f"\nToplam soru sayısı: {len(questions)}")
+
+        # 3 seçildiyse program sonlandırılır.
+        elif choice == "3":
+            print("Program kapatıldı.")
+            break
+
+
+# Bu koşulun anlamı:
+# Dosya doğrudan çalıştırılırsa main() fonksiyonu devreye girsin.
+# Ancak bu dosya başka bir Python dosyası içinde import edilirse
+# otomatik olarak çalışmasın.
+if __name__ == "__main__":
+    main()
