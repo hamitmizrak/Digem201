@@ -58,6 +58,7 @@ from pathlib import Path
 # Amaç: CSV ve sonuç klasörlerini bu dosyanın bulunduğu dizine göre oluşturmak.
 BASE_DIR = Path(__file__).resolve().parent
 
+
 # CSV_FILE:
 # Soruların okunacağı questions.csv dosyasının yolunu temsil eder.
 # BASE_DIR / "questions.csv" ifadesi, işletim sistemine uygun biçimde
@@ -71,8 +72,6 @@ CSV_FILE = BASE_DIR / "questions.csv"
 RESULTS_DIR = BASE_DIR / "results"
 
 
-
-
 # ensure_results_dir fonksiyonu:
 # Sonuçların yazılacağı klasörün var olup olmadığını kontrol eder.
 # Eğer klasör yoksa otomatik olarak oluşturur.
@@ -80,8 +79,6 @@ RESULTS_DIR = BASE_DIR / "results"
 # exist_ok=True -> klasör zaten varsa hata vermez.
 def ensure_results_dir():
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-
-
 
 
 # load_questions fonksiyonu:
