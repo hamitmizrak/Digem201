@@ -537,6 +537,12 @@ def save_result_txt(base_name, score, total, percent, user_results):
     return txt_path
 
 
+# save_result_csv dosyasını fonksiyonun
+# Sonuçları tablo yapısında '.csv' olarak kaydeder
+# böylece Excel, Google Sheets veya veri analizi araçlarında kolaylıkla açılabilir
+# Text insan gözüyle daha rahat okunur
+# def save_result_csv
+
 ################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
