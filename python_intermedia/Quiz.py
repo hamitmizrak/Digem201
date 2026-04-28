@@ -420,14 +420,14 @@ def ask_question(index, total, question_data):
     user_answer = input("\nCevabınız: (A/B/C/D)").strip().upper()
 
     # Geçerli bir cevap girilene akdar kullancıı tekrar yönlendilir.
-    while user_answer not in {"A","B","C","D"}:
+    while user_answer not in {"A", "B", "C", "D"}:
         user_answer = input("Geçersiz giriş. Lütfen A,B,D veya D giriniz: ").strip().upper()
 
     # Soru verisindeki doğru cevap alınır.
     correct_answer = question_data["answer"]
 
     # Kullanıcını cevabı ile dorğu cevap karşılaştırılır.
-    is_correct = user_answer ==correct_answer
+    is_correct = user_answer == correct_answer
 
     # Kullanıcı anlık geri bildirim verilir
     if is_correct:
@@ -444,12 +444,46 @@ def ask_question(index, total, question_data):
         "options": question_data["options"],
         "correct_answer": correct_answer,
         "user_answer": user_answer,
-        "is_correct":is_correct,
+        "is_correct": is_correct,
     }
 
 
-#
-# def run_quiz(questions):
+# Quiz akışının ana  çalıştırıcı fonksiyonudur.
+# Tüm soruları rastgele karıştırır ve sırayla kullanıcıya sorar
+# puan hesaplar ve sonuç listesinini dönderir.
+def run_quiz(questions):
+    # Original soru listesini bozmamak için kopyalama yapıyoruz.
+    randomized_questions = questions[:]
+
+    # Sorular rastgele karıştırılır
+    # Böylece her quiz aynı sırada başlamaz
+    random.shuffle(randomized_questions)
+
+    print("\nQuiz başladı. Sroular rastgele karıştırıldı")
+
+    # Sorular rastgele sayısı hespalanır.
+    total = len(randomized_questions)
+
+    # Score değişkeni doğru cevap sayısını tutar
+    score = 0
+
+    # user_result listesi, her soruya ilişkin kullanıcı sonucunu saklar.
+    user_results = []
+
+    # enumarate : soru numaralandırılması
+    for index, question_data in enumerate(randomized_questions, start=1):
+        result = ask_question(index, total, question_data)
+        user_results.append(result)
+
+        # Eğer soru doğru ise skor 1 artırır
+        if result["is_correct"]:
+            #score =score+ 1
+            score += 1
+
+    # Quiz tamamlandıktan sonra puan, toplam soru ve detaylı sonuçları döndersin.
+    return score, total, user_results
+
+
 ################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
