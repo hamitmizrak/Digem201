@@ -404,7 +404,15 @@ def prompt_menu():
     return choice
 
 
+# ask_question fonksiyonu:
+# Tek bir soruyu kullanıcıya gösterir, cevabı alır ve doğru/yanlış kontrolü yapar.
 #
+# Parametreler:
+# - index: Kaçıncı soru olduğu
+# - total: Toplam soru sayısı
+# - question_data: Soru metni, şıklar ve doğru cevabı içeren sözlük
+#
+# Geriye, bu soruya ait kullanıcı sonucunu içeren bir sözlük döndürür.
 def ask_question(index, total, question_data):
     print("\n" + "=" * 70)
     print(f"Soru {index}/{total}")
@@ -477,7 +485,7 @@ def run_quiz(questions):
 
         # Eğer soru doğru ise skor 1 artırır
         if result["is_correct"]:
-            #score =score+ 1
+            # score =score+ 1
             score += 1
 
     # Quiz tamamlandıktan sonra puan, toplam soru ve detaylı sonuçları döndersin.
@@ -489,7 +497,22 @@ def run_quiz(questions):
 # Örneğin:
 # results/quiz_result_20260428_171845
 # Sonra buna .txt, .csv, .html uzantıları eklenir
-#def create_result_base_names():
+def create_result_base_names():
+    # önce sonuç klasörünün var olup olmadığını kontrol edelim
+    ensure_results_dir()
+
+    # Şu anki tarih-saat bilgisi dosya adı için uygun formatta çevrilir
+    timestamp = datetime.now().strftime("%T%m%d_%H%M%S")
+
+    # Path nesnesi olarak temel dosya adını oluşturulur
+    base_name = RESULTS_DIR / f"quiz_result_{timestamp}"
+    return base_name
+
+# save_result_txt dosyasını fonksiyonun
+# Quiz sonucu okunabilir bir metin raporu olarak '.txt' dosyanına  kaydeder.
+# Text insan gözüyle daha rahat okunur
+# def save_result_txt(base_name,score, total, percent,user_results):
+
 
 ################################################################################################################
 # main fonksiyonu:
