@@ -484,6 +484,13 @@ def run_quiz(questions):
     return score, total, user_results
 
 
+# create_result_base_names fonksiyonu:
+# Sonuç dosyalarını ortak temel isi üretir.
+# Örneğin:
+# results/quiz_result_20260428_171845
+# Sonra buna .txt, .csv, .html uzantıları eklenir
+#def create_result_base_names():
+
 ################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
