@@ -502,16 +502,38 @@ def create_result_base_names():
     ensure_results_dir()
 
     # Şu anki tarih-saat bilgisi dosya adı için uygun formatta çevrilir
-    timestamp = datetime.now().strftime("%T%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Path nesnesi olarak temel dosya adını oluşturulur
     base_name = RESULTS_DIR / f"quiz_result_{timestamp}"
     return base_name
 
+
 # save_result_txt dosyasını fonksiyonun
 # Quiz sonucu okunabilir bir metin raporu olarak '.txt' dosyanına  kaydeder.
 # Text insan gözüyle daha rahat okunur
-# def save_result_txt(base_name,score, total, percent,user_results):
+def save_result_txt(base_name, score, total, percent, user_results):
+    txt_path = base_name.with_suffix(".txt")
+
+    # Dosya yazma modunda açılır
+    with open(txt_path, "w", encoding="utf-8") as file:
+        file.write("PYTHON QUIZ SONUÇ RAPORU\n")
+        file.write("=" * 70 + "\n")
+        file.write(f"Tarih          : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Doğru sayısı   : {score}\n")
+        file.write(f"Yanlış sayısı  : {total - score}\n")
+        file.write(f"Toplam soru    : {total}\n")
+        file.write(f"Başarı Oranı   : {percent:.2f}\n")
+        file.write("=" * 70 + "\n\n")
+
+        # Her soru tek tek rapora detaylı şekilde yazılır.
+        for index, item in enumerate(user_results, start=1):
+            file.write(f"Soru   {index}: {item['question']}\n")
+            file.write(f"İşaretlenen cevap:  {item['user_answer']}) {item['options'][item['user_answer']]}\n")
+            file.write(f"Doğru cevap   :  {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
+            file.write(f"Durum         :  {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
+            file.write("-" * 70 + "\n")
+    return txt_path
 
 
 ################################################################################################################
