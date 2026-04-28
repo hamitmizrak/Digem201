@@ -20,7 +20,6 @@ Sadece kodun anlaşılmasını kolaylaştırmak için komutların ve blokların 
 # quiz sonuçlarını '.csv' formatında dışarı aktarmak için kullanılmaktadır.
 import csv
 
-
 # html modülü:
 # Kullanıcıya gösterilecek metinlerde yer alan özel karakterlerin
 # HTML içinde güvenli biçimde gösterilmesini sağlar.
@@ -28,20 +27,17 @@ import csv
 # Bu sayede HTML raporunda soru ve şık metinleri güvenli şekilde gösterilir.
 import html
 
-
 # random modülü:
 # Rastgelelik gerektiren işlemlerde kullanılır.
 # Bu projede soru listesini her quiz başlangıcında karıştırmak için kullanılır.
 # Böylece her çalıştırmada sorular farklı sırada gelebilir.
 import random
 
-
 # datetime sınıfı:
 # Tarih ve saat bilgisini almak için kullanılır.
 # Burada sonuç dosyalarının isimlerini zaman damgası ile üretmek,
 # ayrıca raporlara quizin hangi tarihte oluşturulduğunu yazmak için kullanılır.
 from datetime import datetime
-
 
 # Path sınıfı:
 # Dosya ve klasör yollarını platformdan bağımsız, güvenli ve okunaklı şekilde
@@ -58,13 +54,11 @@ from pathlib import Path
 # Amaç: CSV ve sonuç klasörlerini bu dosyanın bulunduğu dizine göre oluşturmak.
 BASE_DIR = Path(__file__).resolve().parent
 
-
 # CSV_FILE:
 # Soruların okunacağı questions.csv dosyasının yolunu temsil eder.
 # BASE_DIR / "questions.csv" ifadesi, işletim sistemine uygun biçimde
 # dosya yolunu birleştirir.
 CSV_FILE = BASE_DIR / "questions.csv"
-
 
 # RESULTS_DIR:
 # Quiz sonuçlarının kaydedileceği klasörü temsil eder.
@@ -184,7 +178,6 @@ def load_questions(csv_file):
 
     # Tüm geçerli sorular yüklendikten sonra geri döndürülür.
     return questions
-
 
 
 # save_results_html fonksiyonu:
@@ -411,6 +404,51 @@ def prompt_menu():
     return choice
 
 
+#
+def ask_question(index, total, question_data):
+    print("\n" + "=" * 70)
+    print(f"Soru {index}/{total}")
+    print("-" * 70)
+    print(question_data["question"])
+
+    # options sözlüğündeki tüm şıkları sırayla ekranda göstersin
+    for key, value in question_data["options"].items():
+        print(f"{key}) {value}")
+
+    # Kullanıcıdan cevap alınır.
+    # upper() kullanımı sayesinde küçük harf girilirse bile büyük harfe çevirsin.
+    user_answer = input("\nCevabınız: (A/B/C/D)").strip().upper()
+
+    # Geçerli bir cevap girilene akdar kullancıı tekrar yönlendilir.
+    while user_answer not in {"A","B","C","D"}:
+        user_answer = input("Geçersiz giriş. Lütfen A,B,D veya D giriniz: ").strip().upper()
+
+    # Soru verisindeki doğru cevap alınır.
+    correct_answer = question_data["answer"]
+
+    # Kullanıcını cevabı ile dorğu cevap karşılaştırılır.
+    is_correct = user_answer ==correct_answer
+
+    # Kullanıcı anlık geri bildirim verilir
+    if is_correct:
+        print("Sonuç: Doğru")
+    else:
+        print(
+            f"Sonuç: Yanlış | Doğru cevap: {correct_answer} "
+            f"{question_data['options'][correct_answer]}"
+        )
+
+    # Sonuçlar standart yapıda döndürülsün
+    return {
+        "question": question_data["question"],
+        "options": question_data["options"],
+        "correct_answer": correct_answer,
+        "user_answer": user_answer,
+        "is_correct":is_correct,
+    }
+
+
+################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
 # Genel akış burada yönetilir:
