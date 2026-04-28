@@ -529,10 +529,11 @@ def save_result_txt(base_name, score, total, percent, user_results):
         # Her soru tek tek rapora detaylı şekilde yazılır.
         for index, item in enumerate(user_results, start=1):
             file.write(f"Soru   {index}: {item['question']}\n")
-            file.write(f"İşaretlenen cevap:  {item['user_answer']}) {item['options'][item['user_answer']]}\n")
-            file.write(f"Doğru cevap   :  {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
-            file.write(f"Durum         :  {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
+            file.write(f"İşaretlenen cevap :  {item['user_answer']}) {item['options'][item['user_answer']]}\n")
+            file.write(f"Doğru cevap       :  {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
+            file.write(f"Durum             :  {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
             file.write("-" * 70 + "\n")
+
     return txt_path
 
 
