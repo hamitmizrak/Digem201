@@ -448,6 +448,8 @@ def ask_question(index, total, question_data):
     }
 
 
+#
+# def run_quiz(questions):
 ################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
