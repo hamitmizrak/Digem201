@@ -187,6 +187,208 @@ def load_questions(csv_file):
 
 
 
+# save_results_html fonksiyonu:
+# Sonuçları görsel açıdan daha zengin bir HTML raporu olarak kaydeder.
+# Kullanıcı hangi şıkkı işaretledi, doğru cevap neydi, hangi soru doğru/yanlıştı
+# gibi bilgiler renkli kutular ve rozetlerle gösterilir.
+def save_results_html(base_name, score, total, percent, user_results):
+    html_path = base_name.with_suffix(".html")
+
+    # Her soru kartını HTML içinde bir bölüm olarak biriktireceğiz.
+    sections = []
+
+    # Tüm kullanıcı sonuçlarını geziyoruz.
+    for index, item in enumerate(user_results, start=1):
+        options_html = []
+
+        # Her şık için ayrı HTML satırı üretilir.
+        for key, value in item["options"].items():
+            # Şıkkın hangi görsel sınıfa sahip olacağı hesaplanır.
+            css_class = get_option_css_class(key, item["user_answer"], item["correct_answer"])
+
+            # html.escape ile içerik güvenli hale getirilir.
+            label_parts = [f"<strong>{key})</strong> {html.escape(value)}"]
+
+            # Kullanıcının seçtiği şık ise rozet eklenir.
+            if key == item["user_answer"]:
+                label_parts.append('<span class="badge badge-user">İşaretlediğin</span>')
+
+            # Doğru cevap olan şık ise rozet eklenir.
+            if key == item["correct_answer"]:
+                label_parts.append('<span class="badge badge-correct">Doğru Cevap</span>')
+
+            # Tek bir şık satırı HTML listesi elemanı olarak oluşturulur.
+            option_line = f'<li class="{css_class}">{" ".join(label_parts)}</li>'
+            options_html.append(option_line)
+
+        # Soru doğru mu yanlış mı bilgisi hem metin hem CSS sınıfı olarak hazırlanır.
+        question_status = "Doğru" if item["is_correct"] else "Yanlış"
+        question_status_class = "status-correct" if item["is_correct"] else "status-wrong"
+
+        # Tek bir soru kartının HTML içeriği hazırlanır.
+        section = f"""
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru {index}</h2>
+                <span class="status {question_status_class}">{question_status}</span>
+            </div>
+            <p class="question-text">{html.escape(item["question"])}</p>
+            <ul class="options">
+                {''.join(options_html)}
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> {item["user_answer"]}) {html.escape(item["options"][item["user_answer"]])}</p>
+                <p><strong>Doğru cevap:</strong> {item["correct_answer"]}) {html.escape(item["options"][item["correct_answer"]])}</p>
+            </div>
+        </div>
+        """
+        sections.append(section)
+
+    # Tüm raporun ana HTML iskeleti hazırlanır.
+    # İçinde CSS stilleri de gömülü olduğu için tek dosya halinde açılabilir.
+    html_content = f"""<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Sonuç Raporu</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+            margin: 0;
+            padding: 24px;
+        }}
+        .container {{
+            max-width: 1000px;
+            margin: 0 auto;
+        }}
+        .summary {{
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }}
+        .summary h1 {{
+            margin-top: 0;
+        }}
+        .summary-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }}
+        .summary-box {{
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+        }}
+        .question-card {{
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }}
+        .question-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }}
+        .question-text {{
+            font-size: 18px;
+            font-weight: bold;
+        }}
+        .status {{
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 14px;
+        }}
+        .status-correct {{
+            background: #dcfce7;
+            color: #166534;
+        }}
+        .status-wrong {{
+            background: #fee2e2;
+            color: #991b1b;
+        }}
+        .options {{
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }}
+        .option {{
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }}
+        .option-correct {{
+            background: #dcfce7;
+            border-color: #22c55e;
+        }}
+        .option-correct-selected {{
+            background: #bbf7d0;
+            border: 2px solid #15803d;
+        }}
+        .option-wrong-selected {{
+            background: #fee2e2;
+            border-color: #ef4444;
+        }}
+        .badge {{
+            display: inline-block;
+            margin-left: 8px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }}
+        .badge-user {{
+            background: #dbeafe;
+            color: #1d4ed8;
+        }}
+        .badge-correct {{
+            background: #dcfce7;
+            color: #166534;
+        }}
+        .answer-summary {{
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="summary">
+            <h1>Quiz Sonuç Raporu</h1>
+            <p><strong>Tarih:</strong> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+            <div class="summary-grid">
+                <div class="summary-box"><strong>Doğru Sayısı</strong><br>{score}</div>
+                <div class="summary-box"><strong>Yanlış Sayısı</strong><br>{total - score}</div>
+                <div class="summary-box"><strong>Toplam Soru</strong><br>{total}</div>
+                <div class="summary-box"><strong>Başarı Oranı</strong><br>%{percent:.2f}</div>
+            </div>
+        </div>
+
+        {''.join(sections)}
+    </div>
+</body>
+</html>
+"""
+
+    # Hazırlanan HTML metni dosyaya UTF-8 ile yazılır.
+    html_path.write_text(html_content, encoding="utf-8")
+    return html_path
+
+
 # prompt_menu fonksiyonu:
 # Kullanıcıya ana menüyü gösterir ve seçim alır.
 # Geçersiz giriş yapılırsa kullanıcıyı yeniden yönlendirir.
