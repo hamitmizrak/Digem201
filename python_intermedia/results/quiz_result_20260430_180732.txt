@@ -1,0 +1,109 @@
+PYTHON QUIZ SONUÇ RAPORU
+======================================================================
+Tarih          : 2026-04-30 18:07:32
+Doğru sayısı   : 19
+Yanlış sayısı  : 1
+Toplam soru    : 20
+Başarı Oranı   : 95.00
+======================================================================
+
+Soru   1: Python'da metin veri tipi hangisidir?
+İşaretlenen cevap :  B) str
+Doğru cevap       :  B) str
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   2: Python büyük-küçük harfe duyarlı mıdır?
+İşaretlenen cevap :  B) Evet
+Doğru cevap       :  B) Evet
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   3: Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?
+İşaretlenen cevap :  C) print()
+Doğru cevap       :  C) print()
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   4: Python'da liste veri tipi hangisidir?
+İşaretlenen cevap :  A) {1,2,3}
+Doğru cevap       :  C) [1,2,3]
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   5: Aşağıdakilerden hangisi koşul ifadesidir?
+İşaretlenen cevap :  B) if
+Doğru cevap       :  B) if
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   6: def anahtar kelimesi ne için kullanılır?
+İşaretlenen cevap :  C) Fonksiyon tanımlamak için
+Doğru cevap       :  C) Fonksiyon tanımlamak için
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   7: Aşağıdakilerden hangisi doğru karşılaştırmadır?
+İşaretlenen cevap :  B) 5 == 5
+Doğru cevap       :  B) 5 == 5
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   8: int('25') ifadesinin sonucu nedir?
+İşaretlenen cevap :  A) 25
+Doğru cevap       :  A) 25
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   9: 5 + 3 * 2 işleminin sonucu kaçtır?
+İşaretlenen cevap :  B) 11
+Doğru cevap       :  B) 11
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   10: len([1,2,3]) sonucu kaçtır?
+İşaretlenen cevap :  B) 3
+Doğru cevap       :  B) 3
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   11: Aşağıdakilerden hangisi sözlük veri tipidir?
+İşaretlenen cevap :  C) {'ad':'Ali'}
+Doğru cevap       :  C) {'ad':'Ali'}
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   12: Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?
+İşaretlenen cevap :  C) sayi1 = 5
+Doğru cevap       :  C) sayi1 = 5
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   13: Python dosya uzantısı hangisidir?
+İşaretlenen cevap :  B) .py
+Doğru cevap       :  B) .py
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   14: for döngüsü ne için kullanılır?
+İşaretlenen cevap :  B) Tekrar eden işlemler için
+Doğru cevap       :  B) Tekrar eden işlemler için
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   15: Python'da yorum satırı nasıl yazılır?
+İşaretlenen cevap :  C) # yorum
+Doğru cevap       :  C) # yorum
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   16: bool veri tipinde doğru değer hangisidir?
+İşaretlenen cevap :  C) True
+Doğru cevap       :  C) True
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   17: Python'da bir modülü projeye eklemek için hangisi kullanılır?
+İşaretlenen cevap :  D) import
+Doğru cevap       :  D) import
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   18: input() fonksiyonu ne işe yarar?
+İşaretlenen cevap :  B) Kullanıcıdan veri alır
+Doğru cevap       :  B) Kullanıcıdan veri alır
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   19: append() metodu genelde hangi veri tipiyle kullanılır?
+İşaretlenen cevap :  A) list
+Doğru cevap       :  A) list
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   20: Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?
+İşaretlenen cevap :  B) python quiz.py
+Doğru cevap       :  B) python quiz.py
+Durum             :  Doğru
+----------------------------------------------------------------------

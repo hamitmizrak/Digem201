@@ -425,7 +425,7 @@ def ask_question(index, total, question_data):
 
     # Kullanıcıdan cevap alınır.
     # upper() kullanımı sayesinde küçük harf girilirse bile büyük harfe çevirsin.
-    user_answer = input("\nCevabınız: (A/B/C/D)").strip().upper()
+    user_answer = input("\nCevabınız: (A/B/C/D): ").strip().upper()
 
     # Geçerli bir cevap girilene akdar kullancıı tekrar yönlendilir.
     while user_answer not in {"A", "B", "C", "D"}:
@@ -625,6 +625,32 @@ def save_all_results(score, total, user_results):
     html_file = save_results_html(base_name, score, total, percent, user_results)
 
     return txt_file, csv_file, html_file, percent
+
+
+# show_final_summary fonksiyonu:
+# Quiz bitince kullanıcıya terminal ekranında özet bilgi verir.
+# Doğru, yanlış, toplam ve yüzde başarı bilgisi yazdırılır.
+# Ayrıca başarı oranına göre kısa bir değerlendirme metni gösterilir.
+def show_final_summary(score, total, percent):
+    print("\n" + "=" * 70)
+    print("Quiz tamamlandı")
+    print("=" * 70)
+    print(f"Doğru sayısı: {score}")
+    print(f"Yanlış sayısı: {total - score}")
+    print(f"Toplam soru: {total}")
+    print(f"Başarı Oranı: %{percent:.2f}")
+
+    # Başarı oranına göre seviye değerlendirme
+    if percent == 100:
+        print("Değerlendirme mükemmel")
+    elif percent >= 80:
+        print("Değerlendirme çok iyi")
+    elif percent >= 60:
+        print("Değerlendirme iyi")
+    elif percent >= 40:
+        print("Değerlendirme orta")
+    else:
+        print("Değerlendirme: Daha iyi olabilir çok çalışmalısınız.")
 
 
 ################################################################################################################

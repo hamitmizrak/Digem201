@@ -1,0 +1,28 @@
+summary_type,value
+date,2026-04-30 18:07:32
+score,19
+wrong,1
+total,20
+percent,95.00
+
+question_no,question,option_a,option_b,option_c,option_d,user_answer,correct_answer,result
+1,Python'da metin veri tipi hangisidir?,int,str,bool,float,B,B,Doğru
+2,Python büyük-küçük harfe duyarlı mıdır?,Hayır,Evet,Sadece sayılarda,Sadece fonksiyonlarda,B,B,Doğru
+3,Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?,echo(),printf(),print(),write(),C,C,Doğru
+4,Python'da liste veri tipi hangisidir?,"{1,2,3}","(1,2,3)","[1,2,3]","<1,2,3>",A,C,Yanlış
+5,Aşağıdakilerden hangisi koşul ifadesidir?,for,if,def,import,B,B,Doğru
+6,def anahtar kelimesi ne için kullanılır?,Sınıf oluşturmak için,Modül çağırmak için,Fonksiyon tanımlamak için,Dosya kapatmak için,C,C,Doğru
+7,Aşağıdakilerden hangisi doğru karşılaştırmadır?,5 = 5,5 == 5,5 === 5,5 := 5,B,B,Doğru
+8,int('25') ifadesinin sonucu nedir?,25,'25',Hata verir,25.0,A,A,Doğru
+9,5 + 3 * 2 işleminin sonucu kaçtır?,16,11,13,10,B,B,Doğru
+10,"len([1,2,3]) sonucu kaçtır?",2,3,4,1,B,B,Doğru
+11,Aşağıdakilerden hangisi sözlük veri tipidir?,"[1,2]","(1,2)",{'ad':'Ali'},<ad:Ali>,C,C,Doğru
+12,Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?,1sayi = 5,sayi-1 = 5,sayi1 = 5,class = 5,C,C,Doğru
+13,Python dosya uzantısı hangisidir?,.java,.py,.html,.js,B,B,Doğru
+14,for döngüsü ne için kullanılır?,Karşılaştırma yapmak için,Tekrar eden işlemler için,Sadece sayı toplamak için,Fonksiyon silmek için,B,B,Doğru
+15,Python'da yorum satırı nasıl yazılır?,// yorum,/* yorum */,# yorum,<!-- yorum -->,C,C,Doğru
+16,bool veri tipinde doğru değer hangisidir?,true,TRUE,True,dogru,C,C,Doğru
+17,Python'da bir modülü projeye eklemek için hangisi kullanılır?,using,package,include,import,D,D,Doğru
+18,input() fonksiyonu ne işe yarar?,Ekrana yazı yazdırır,Kullanıcıdan veri alır,Dosya açar,Liste sıralar,B,B,Doğru
+19,append() metodu genelde hangi veri tipiyle kullanılır?,list,int,float,tuple,A,A,Doğru
+20,Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?,run quiz.py,python quiz.py,start quiz.py,open quiz.py,B,B,Doğru
