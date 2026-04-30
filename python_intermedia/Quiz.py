@@ -571,20 +571,40 @@ def save_results_csv(base_name, score, total, percent, user_results):
             "result",
         ])
 
-    for index, item in enumerate(user_results, start=1):
-        writer.writerow([
-            index,
-            item["question"],
-            item["options"]["A"],
-            item["options"]["B"],
-            item["options"]["C"],
-            item["options"]["D"],
-            item["user_answer"],
-            item["correct_answer"],
-            "Doğru" if item["is_correct"] else "Yanlış",
-        ])
+        # Her sorunun detayları satır satır yazılır.
+        for index, item in enumerate(user_results, start=1):
+            writer.writerow([
+                index,
+                item["question"],
+                item["options"]["A"],
+                item["options"]["B"],
+                item["options"]["C"],
+                item["options"]["D"],
+                item["user_answer"],
+                item["correct_answer"],
+                "Doğru" if item["is_correct"] else "Yanlış",
+            ])
+
     return csv_path
 
+# get_option_css_class fonksiyonu:
+# HTML raporunda her seçeneğin hangi renkle/biçimle gösterileceğini belirler.
+#
+# Senaryolar:
+# - Hem kullanıcı seçti hem doğruysa: özel başarılı seçili stil
+# - Doğru cevap ama kullanıcı seçmediysa: doğru cevap stili
+# - Kullanıcı yanlış şıkkı seçtiyse: yanlış seçili stil
+# - Diğer tüm şıklar: normal stil
+#
+# Bu fonksiyon yalnızca CSS sınıfı adı döndürür.
+def get_option_css_class(option_key, user_answer, correct_answer):
+    if option_key ==correct_answer and option_key==user_answer:
+        return "option option-correct-selected"
+    if option_key ==correct_answer:
+        return "option option-selected"
+    if option_key ==correct_answer and option_key!=user_answer:
+        return "option option-wrong-selected"
+    return "option"
 
 ################################################################################################################
 # main fonksiyonu:
