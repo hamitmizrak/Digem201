@@ -541,7 +541,7 @@ def save_result_txt(base_name, score, total, percent, user_results):
 # Sonuçları tablo yapısında '.csv' olarak kaydeder
 # böylece Excel, Google Sheets veya veri analizi araçlarında kolaylıkla açılabilir
 # Text insan gözüyle daha rahat okunur
-# def save_result_csv
+# def save_results_csv
 
 ################################################################################################################
 # main fonksiyonu:
