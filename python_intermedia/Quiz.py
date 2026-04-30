@@ -627,6 +627,32 @@ def save_all_results(score, total, user_results):
     return txt_file, csv_file, html_file, percent
 
 
+# show_final_summary fonksiyonu:
+# Quiz bitince kullanıcıya terminal ekranında özet bilgi verir.
+# Doğru, yanlış, toplam ve yüzde başarı bilgisi yazdırılır.
+# Ayrıca başarı oranına göre kısa bir değerlendirme metni gösterilir.
+def show_final_summary(score, total, percent):
+    print("\n" + "=" * 70)
+    print("Quiz tamamlandı")
+    print("=" * 70)
+    print(f"Doğru sayısı: {score}")
+    print(f"Yanlış sayısı: {total - score}")
+    print(f"Toplam soru: {total}")
+    print(f"Başarı Oranı: %{percent:.2f}")
+
+    # Başarı oranına göre seviye değerlendirme
+    if percent == 100:
+        print("Değerlendirme mükemmel")
+    elif percent >= 80:
+        print("Değerlendirme çok iyi")
+    elif percent >= 60:
+        print("Değerlendirme iyi")
+    elif percent >= 40:
+        print("Değerlendirme orta")
+    else:
+        print("Değerlendirme: Daha iyi olabilir çok çalışmalısınız.")
+
+
 ################################################################################################################
 # main fonksiyonu:
 # Programın giriş noktasıdır.
