@@ -542,6 +542,36 @@ def save_result_txt(base_name, score, total, percent, user_results):
 # böylece Excel, Google Sheets veya veri analizi araçlarında kolaylıkla açılabilir
 # Text insan gözüyle daha rahat okunur
 # def save_results_csv
+def save_results_csv(base_name, score, total, percent, user_results):
+    csv_path = base_name.with_suffix(".csv")
+
+    # Dosya yazma modunda açılır
+    with open(csv_path, "w", encoding="utf-8") as file:
+        writer= csv.writer(file)
+
+        # özet bilgiler
+        writer.writerow(["summary_type","value"])
+        writer.writerow(["date", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        writer.writerow(["score", score])
+        writer.writerow(["wrong", total - score])
+        writer.writerow(["total", total])
+        writer.writerow(["percent", f"{percent:.2f}"])
+        writer.writerow([])
+
+        # Ardından detay veri başlıkları yazılır.
+        writer.writerow([
+            "question_no",
+            "question",
+            "option_a",
+            "option_b",
+            "option_c",
+            "option_d",
+            "user_answer",
+            "correct_answer",
+            "result",
+        ])
+
+
 
 ################################################################################################################
 # main fonksiyonu:
