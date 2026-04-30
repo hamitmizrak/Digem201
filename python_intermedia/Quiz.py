@@ -587,6 +587,7 @@ def save_results_csv(base_name, score, total, percent, user_results):
 
     return csv_path
 
+
 # get_option_css_class fonksiyonu:
 # HTML raporunda her seçeneğin hangi renkle/biçimle gösterileceğini belirler.
 #
@@ -598,13 +599,33 @@ def save_results_csv(base_name, score, total, percent, user_results):
 #
 # Bu fonksiyon yalnızca CSS sınıfı adı döndürür.
 def get_option_css_class(option_key, user_answer, correct_answer):
-    if option_key ==correct_answer and option_key==user_answer:
+    if option_key == correct_answer and option_key == user_answer:
         return "option option-correct-selected"
-    if option_key ==correct_answer:
+    if option_key == correct_answer:
         return "option option-selected"
-    if option_key ==correct_answer and option_key!=user_answer:
+    if option_key == correct_answer and option_key != user_answer:
         return "option option-wrong-selected"
     return "option"
+
+
+# save_all_results fonksiyonu:
+# Quiz tamamlandıktan sonra tüm rapor dosyalarını tek noktadan üretir.
+# TXT, CSV ve HTML dosyalarını oluşturur ve bunların yolunu döndürür.
+def save_all_results(score, total, user_results):
+    # Başarı oranı yüzde olarak hesaplanacaktır.
+    # total sıfır olursa hata olmaması için güvenli kontroller gereklidir
+    percent = (score / total) * 100 if total else 0
+
+    # Tüm dosyalarda kullanıalcak ortak temel isim üretilir.
+    base_name = create_result_base_names()
+
+    # Üç farklı formatta rapor oluşturulur.
+    txt_file = save_results_txt(base_name, score, total, percent, user_results)
+    csv_file = save_results_csv(base_name, score, total, percent, user_results)
+    html_file = save_results_html(base_name, score, total, percent, user_results)
+
+    return txt_file, csv_file, html_file, percent
+
 
 ################################################################################################################
 # main fonksiyonu:
