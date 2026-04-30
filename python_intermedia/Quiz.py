@@ -547,10 +547,10 @@ def save_results_csv(base_name, score, total, percent, user_results):
 
     # Dosya yazma modunda açılır
     with open(csv_path, "w", encoding="utf-8") as file:
-        writer= csv.writer(file)
+        writer = csv.writer(file)
 
         # özet bilgiler
-        writer.writerow(["summary_type","value"])
+        writer.writerow(["summary_type", "value"])
         writer.writerow(["date", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
         writer.writerow(["score", score])
         writer.writerow(["wrong", total - score])
@@ -571,6 +571,19 @@ def save_results_csv(base_name, score, total, percent, user_results):
             "result",
         ])
 
+    for index, item in enumerate(user_results, start=1):
+        writer.writerow([
+            index,
+            item["question"],
+            item["options"]["A"],
+            item["options"]["B"],
+            item["options"]["C"],
+            item["options"]["D"],
+            item["user_answer"],
+            item["correct_answer"],
+            "Doğru" if item["is_correct"] else "Yanlış",
+        ])
+    return csv_path
 
 
 ################################################################################################################
