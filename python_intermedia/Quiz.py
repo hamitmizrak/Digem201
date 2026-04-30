@@ -509,10 +509,10 @@ def create_result_base_names():
     return base_name
 
 
-# save_result_txt dosyasını fonksiyonun
+# save_results_txt dosyasını fonksiyonun
 # Quiz sonucu okunabilir bir metin raporu olarak '.txt' dosyanına  kaydeder.
 # Text insan gözüyle daha rahat okunur
-def save_result_txt(base_name, score, total, percent, user_results):
+def save_results_txt(base_name, score, total, percent, user_results):
     txt_path = base_name.with_suffix(".txt")
 
     # Dosya yazma modunda açılır
