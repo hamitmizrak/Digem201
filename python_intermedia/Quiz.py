@@ -714,6 +714,20 @@ def save_results_docx(base_name,score,total, percent,user_results):
         add_docx_paragraph(document,"-"*70)
 
     # Word dosyası belirtilen yola kaydedilir.
+    document.save(docx_path)
+    return docx_path
+
+
+# set_excel_cell_style fonksiyonu
+# Execel raporundaki başlık ve veri hücrelerinini daha okunabilir görünmesi için
+# ortak font, kenarlık, hizalama, dolgu ayarlarını uygular
+def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
+    thin_border= Border(
+        left=Side(style="thin",color="D1D5DB"),
+        right=Side(style="thin",color="D1D5DB"),
+        top=Side(style="thin",color="D1D5DB"),
+        bottom=Side(style="thin",color="D1D5DB"),
+    )
 
 
 
