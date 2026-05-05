@@ -39,12 +39,33 @@ import random
 # ayrıca raporlara quizin hangi tarihte oluşturulduğunu yazmak için kullanılır.
 from datetime import datetime
 
+
 # Path sınıfı:
 # Dosya ve klasör yollarını platformdan bağımsız, güvenli ve okunaklı şekilde
 # yönetmek için kullanılır.
 # Windows, Linux, macOS gibi sistemlerde dosya yollarını elle birleştirmek yerine
 # nesne tabanlı güvenli yaklaşım sağlar.
 from pathlib import Path
+
+
+# txt, csv, html, docx
+# python-docx kütüphanesi
+# Microsoft Word  .docx
+# pip install python-docx
+from docx import Document
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt, RGBColor
+
+
+# txt, csv, html, docx, xlsx
+# openpyxl kütüphanesi (Excel)
+# Microsoft Excel  .xlsx
+# pip install openpyxl
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
+
 
 # BASE_DIR:
 # Bu Python dosyasının bulunduğu klasörü temsil eder.

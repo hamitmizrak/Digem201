@@ -41,6 +41,15 @@ Alt + 1 basalım
 ```
 
 
+### Run
+```sh
+pip install python-docx
+pip install -r requirements.txt
+python Quiz.py
+```
+---
+
+
 
 # Python
 [GitHub Address]( https://github.com/hamitmizrak/python_techcareer_2025_101_1.git )
