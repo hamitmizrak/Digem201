@@ -39,14 +39,12 @@ import random
 # ayrıca raporlara quizin hangi tarihte oluşturulduğunu yazmak için kullanılır.
 from datetime import datetime
 
-
 # Path sınıfı:
 # Dosya ve klasör yollarını platformdan bağımsız, güvenli ve okunaklı şekilde
 # yönetmek için kullanılır.
 # Windows, Linux, macOS gibi sistemlerde dosya yollarını elle birleştirmek yerine
 # nesne tabanlı güvenli yaklaşım sağlar.
 from pathlib import Path
-
 
 # txt, csv, html, docx
 # python-docx kütüphanesi
@@ -57,15 +55,13 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt, RGBColor
 
-
-# txt, csv, html, docx, xlsx
+# txt, csv, html, docx, xlsx, .xml
 # openpyxl kütüphanesi (Excel)
 # Microsoft Excel  .xlsx
 # pip install openpyxl
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
-
 
 # BASE_DIR:
 # Bu Python dosyasının bulunduğu klasörü temsil eder.
@@ -529,6 +525,7 @@ def create_result_base_names():
     base_name = RESULTS_DIR / f"quiz_result_{timestamp}"
     return base_name
 
+
 #############################################################################
 # TXT CREATE
 # save_results_txt dosyasını fonksiyonun
@@ -612,73 +609,72 @@ def save_results_csv(base_name, score, total, percent, user_results):
     return csv_path
 
 
-
 #############################################################################
 # DOCX(WORD) CREATE
 # add_docx_paragraph fonksiyonu:
 # Word raporunda tekrar eden paragraf oluşturma işlemini sadeleştirir
 # run.bold ve run.font.size gibi değerler burada merkezi şekilde yönetilir.
 def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
-    paragraph= document.add_paragraph()
+    paragraph = document.add_paragraph()
     run = paragraph.add_run(text)
-    run.bold= bold
+    run.bold = bold
     run.font.size = Pt(font_size)
 
     # Renk verilmişse RGBColor ile uygulanır.
     if color:
-        run.font.color.rgb= RGBColor(*color)
+        run.font.color.rgb = RGBColor(*color)
 
     return paragraph
+
 
 # save_results_docx fonksiyonu:
 # Quiz sonucunu Microsoft Word tarafından açılabilen '.docx' formatından kaydetmek
 # Bu raporda önce özet bilgiler, sonra her sorunun detaylı cevabı yer alır.
 # Amaç: Kulalnıcı çıktıyı doğrudan rapor/doküman olarak paylaşabilsin
-def save_results_docx(base_name,score,total, percent,user_results):
+def save_results_docx(base_name, score, total, percent, user_results):
     docx_path = base_name.with_suffix(".docx")
 
     # Yeni bir word dokümanı oluşturmak
-    document= Document()
+    document = Document()
 
     # Ana başlık hazırlanır
     title = document.add_heading("Python Quiz Sonuç raporu", level=1)
-    title.alignment= WD_ALIGN_PARAGRAPH.CENTER
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # Rapor tarihi ve genel özet alanı hazırlanır
     add_docx_paragraph(document, f"Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", bold=True)
     add_docx_paragraph(document, "Genel Özet", bold=True, font_size=14)
 
     # Özet Tablo: doğru, yanlış, toplam, başarı oranı bilgilerini içerir.
-    summary_table = document.add_table(rows=1,cols=2)
-    summary_table.alignment= WD_TABLE_ALIGNMENT.CENTER
-    summary_table.style= "Table Grid"
+    summary_table = document.add_table(rows=1, cols=2)
+    summary_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    summary_table.style = "Table Grid"
 
     header_cells = summary_table.rows[0].cells
-    header_cells[0].text="Alan"
-    header_cells[1].text="Değer"
+    header_cells[0].text = "Alan"
+    header_cells[1].text = "Değer"
 
     summary_rows = [
         ("Doğru Sayısı", str(score)),
-        ("Yanlış Sayısı", str(total-score)),
+        ("Yanlış Sayısı", str(total - score)),
         ("Toplam Soru", str(total)),
         ("Başarı Oranı", f"%{percent:.2f}"),
     ]
 
     # Döngü olarak
     for label, value in summary_rows:
-        row_cells= summary_table.add_row().cells
-        row_cells[0].text= label
-        row_cells[1].text= value
-
+        row_cells = summary_table.add_row().cells
+        row_cells[0].text = label
+        row_cells[1].text = value
 
     #
     document.add_paragraph()
     add_docx_paragraph(document, "Soru detayları", bold=True, font_size=14)
 
     # Her soru için Word içinde ayrı bölüm oluşturulur.
-    for index, item in enumerate(user_results,start=1):
-        status_text ="Doğru" if item["is_correct"] else "Yanlış"
-        status_color =(22,101,52) if item["is_correct"] else (153,27,27)
+    for index, item in enumerate(user_results, start=1):
+        status_text = "Doğru" if item["is_correct"] else "Yanlış"
+        status_color = (22, 101, 52) if item["is_correct"] else (153, 27, 27)
 
         add_docx_paragraph(
             document,
@@ -687,7 +683,7 @@ def save_results_docx(base_name,score,total, percent,user_results):
             font_size=12,
             color=status_color,
         )
-        add_docx_paragraph(document,item["question"], bold=True)
+        add_docx_paragraph(document, item["question"], bold=True)
 
         # Şıklar Word raporunda madde madde yazılır.
         for option_key, option_value in item["options"].items():
@@ -709,11 +705,12 @@ def save_results_docx(base_name,score,total, percent,user_results):
             document,
             f"Doğru cevap: {item['correct_answer']}) {item['options'][item['correct_answer']]}",
         )
-        add_docx_paragraph(document,"-"*70)
+        add_docx_paragraph(document, "-" * 70)
 
     # Word dosyası belirtilen yola kaydedilir.
     document.save(docx_path)
     return docx_path
+
 
 ################################################################################
 # EXCEL CREATE
@@ -721,20 +718,20 @@ def save_results_docx(base_name,score,total, percent,user_results):
 # Excel raporundaki başlık ve veri hücrelerinini daha okunabilir görünmesi için
 # ortak font, kenarlık, hizalama, dolgu ayarlarını uygular
 def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
-    thin_border= Border(
-        left=Side(style="thin",color="D1D5DB"),
-        right=Side(style="thin",color="D1D5DB"),
-        top=Side(style="thin",color="D1D5DB"),
-        bottom=Side(style="thin",color="D1D5DB"),
+    thin_border = Border(
+        left=Side(style="thin", color="D1D5DB"),
+        right=Side(style="thin", color="D1D5DB"),
+        top=Side(style="thin", color="D1D5DB"),
+        bottom=Side(style="thin", color="D1D5DB"),
     )
 
-
     cell.font = Font(bold=bold, color=font_color)
-    cell.border= thin_border
-    cell.alignment= Alignment(vertical="top", wrap_text=True)
+    cell.border = thin_border
+    cell.alignment = Alignment(vertical="top", wrap_text=True)
 
     if fill_color:
         cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
+
 
 # set_excel_style fonksiyonu:
 # Excel rapoundaki başlık ve veri hüxrelerinin daha okunabilir görünmesi için
@@ -748,12 +745,39 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
     )
 
     cell.font = Font(bold, color=font_color)
-    cell.border= thin_border
-    cell.aligment= Alignment(vertical="top", wrap_text=True)
+    cell.border = thin_border
+    cell.aligment = Alignment(vertical="top", wrap_text=True)
 
     if fill_color:
         cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
 
+
+# autofit_excel_columns Fonksiyonu
+# Excel sayfalarında kolon genişliğini içerik uzunluğuna göre ayarlar
+# Çok uzun metinler için maksimum genişlik sınırı olması lazım.
+def autofit_excel_columns(worksheet, max_width=45):
+    for column_cells in worksheet.columns:
+        max_length = 0
+        column_letter = get_column_letter(column_cells[0].column)
+
+        for cell in column_cells:
+            value = cell.value
+            if value is not None:
+                max_length = max(max_length, len(str(value)))
+
+        worksheet.column_dimensions[column_letter].width = min(max_length + 3, max_width)
+
+
+# save_results_xlsx fonksiyonu:
+# Quiz sonucu Microsoft Excel tarafında açılabilen '.xlsx' formatında kaydeder.
+# Dosyada iki sayfa vardır:
+# 1) Özet
+# 2) Detaylar
+# Amaç: Sonuçların filtrelebilir, tablolaştırabilir olsun ve analiz edebilir olsun
+# def save_results_xlsx(base_name, score, total, percent, user_results):
+
+#############################################################################
+# XML CREATE
 
 ##################################################################################
 # get_option_css_class fonksiyonu:
