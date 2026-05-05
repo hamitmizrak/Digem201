@@ -730,6 +730,14 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
     )
 
 
+    cell.font = Font(bold=bold, color=font_color)
+    cell.border= thin_border
+    cell.alignment= Alignment(vertical="top", wrap_text=True)
+
+    if fill_color:
+        cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
+
+
 
 
 
