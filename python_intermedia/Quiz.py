@@ -529,7 +529,8 @@ def create_result_base_names():
     base_name = RESULTS_DIR / f"quiz_result_{timestamp}"
     return base_name
 
-
+#############################################################################
+# TXT CREATE
 # save_results_txt dosyasını fonksiyonun
 # Quiz sonucu okunabilir bir metin raporu olarak '.txt' dosyanına  kaydeder.
 # Text insan gözüyle daha rahat okunur
@@ -557,6 +558,9 @@ def save_results_txt(base_name, score, total, percent, user_results):
 
     return txt_path
 
+
+#############################################################################
+# CSV CREATE
 
 # save_result_csv dosyasını fonksiyonun
 # Sonuçları tablo yapısında '.csv' olarak kaydeder
@@ -607,6 +611,29 @@ def save_results_csv(base_name, score, total, percent, user_results):
             ])
 
     return csv_path
+
+
+
+#############################################################################
+# DOCX(WORD) CREATE
+# add_docx_paragraph fonksiyonu:
+# Word raporunda tekrar eden paragraf oluşturma işlemini sadeleştirir
+# run.bold ve run.font.size gibi değerler burada merkezi şekilde yönetilir.
+def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
+    paragraph= document.add_paragraph()
+    run = paragraph.add_run(text)
+    run.bold= bold
+    run.font.size = Pt(font_size)
+
+    # Renk verilmişse RGBColor ile uygulanır.
+    if color:
+        run.font.color.rgb= RGBColor(*color)
+
+    return paragraph
+
+
+#
+
 
 
 # get_option_css_class fonksiyonu:
