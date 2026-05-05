@@ -636,7 +636,7 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
 # Quiz sonucunu Microsoft Word tarafından açılabilen '.docx' formatından kaydetmek
 # Bu raporda önce özet bilgiler, sonra her sorunun detaylı cevabı yer alır.
 # Amaç: Kulalnıcı çıktıyı doğrudan rapor/doküman olarak paylaşabilsin
-def save_results_docx(base_name_score_total, percent,user_results):
+def save_results_docx(base_name,score,total, percent,user_results):
     docx_path = base_name.with_suffix(".docx")
 
     # Yeni bir word dokümanı oluşturmak
@@ -658,6 +658,38 @@ def save_results_docx(base_name_score_total, percent,user_results):
     header_cells = summary_table.rows[0].cells
     header_cells[0].text="Alan"
     header_cells[1].text="Değer"
+
+    summary_rows = [
+        ("Doğru Sayısı", str(score)),
+        ("Yanlış Sayısı", str(total-score)),
+        ("Toplam Soru", str(total)),
+        ("Başarı Oranı", f"%{percent:.2f}"),
+    ]
+
+    # Döngü olarak
+    for label, value in summary_rows:
+        row_cells= summary_table.add_row().cells
+        row_cells[0].text= label
+        row_cells[1].text= value
+
+
+    #
+    document.add_paragraph()
+    add_docx_paragraph(document, "Soru detayları", bold=True, font_size=14)
+
+    # Her soru için Word içinde ayrı bölüm oluşturulur.
+    for index, item in enumerate(user_results,start=1):
+        status_text ="Doğru" if item["is_correct"] else "Yanlış"
+        status_color =(22,101,52) if item["is_correct"] else (153,27,27)
+
+        add_docx_paragraph(
+            document,
+            f"Soru {index}- {status_text}",
+            bold=True,
+            font_size=12,
+            color=status_color,
+        )
+        add_docx_paragraph(document,item["question"], bold=True)
 
 
 
