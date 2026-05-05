@@ -691,6 +691,30 @@ def save_results_docx(base_name,score,total, percent,user_results):
         )
         add_docx_paragraph(document,item["question"], bold=True)
 
+        # Şıklar Word raporunda madde madde yazılır.
+        for option_key, option_value in item["options"].items():
+            option_suffix = []
+            if option_key == item["user_answer"]:
+                option_suffix.append("İşaretlediğin")
+            if option_key == item["correct_answer"]:
+                option_suffix.append("Doğru Cevap")
+
+            suffix_text = f" [{' | '.join(option_suffix)}" if option_suffix else ""
+            add_docx_paragraph(document, f"{option_key}) {option_value}{suffix_text}")
+
+        add_docx_paragraph(
+            document,
+            f"İşaretlenen cevap: {item['user_answer']}) {item['options'][item['user_answer']]}",
+        )
+
+        add_docx_paragraph(
+            document,
+            f"Doğru cevap: {item['correct_answer']}) {item['options'][item['correct_answer']]}",
+        )
+        add_docx_paragraph(document,"-"*70)
+
+    # Word dosyası belirtilen yola kaydedilir.
+
 
 
 
