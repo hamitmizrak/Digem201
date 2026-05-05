@@ -632,7 +632,40 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
     return paragraph
 
 
-#
+# save_results_docx fonksiyonu:
+# Quiz sonucunu Microsoft Word tarafından açılabilen '.docx' formatından kaydetmek
+# Bu raporda önce özet bilgiler, sonra her sorunun detaylı cevabı yer alır.
+# Amaç: Kulalnıcı çıktıyı doğrudan rapor/doküman olarak paylaşabilsin
+def save_results_docx(base_name_score_total, percent,user_results):
+    docx_path = base_name.with_suffix(".docx")
+
+    # Yeni bir word dokümanı oluşturmak
+    document= Document()
+
+    # Ana başlık hazırlanır
+    title = document.add_heading("Python Quiz Sonuç raporu", level=1)
+    title.alignment= WD_ALIGN_PARAGRAPH.CENTER
+
+    # Rapor tarihi ve genel özet alanı hazırlanır
+    add_docx_paragraph(document, f"Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", bold=True)
+    add_docx_paragraph(document, "Genel Özet", bold=True, font_size=14)
+
+    # Özet Tablo: doğru, yanlış, toplam, başarı oranı bilgilerini içerir.
+    summary_table = document.add_table(rows=1,cols=2)
+    summary_table.alignment= WD_TABLE_ALIGNMENT.CENTER
+    summary_table.style= "Table Grid"
+
+    header_cells = summary_table.rows[0].cells
+    header_cells[0].text="Alan"
+    header_cells[1].text="Değer"
+
+
+
+
+
+
+
+
 
 
 
