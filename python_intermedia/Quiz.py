@@ -740,6 +740,20 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
 # Excel rapoundaki başlık ve veri hüxrelerinin daha okunabilir görünmesi için
 # ortak font, kenarlık, hizalama ve dolgu ayarlarını uygular
 def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
+    thin_border = Border(
+        left=Side(style="thin", color="D1D5DB"),
+        right=Side(style="thin", color="D1D5DB"),
+        top=Side(style="thin", color="D1D5DB"),
+        bottom=Side(style="thin", color="D1D5DB"),
+    )
+
+    cell.font = Font(bold, color=font_color)
+    cell.border= thin_border
+    cell.aligment= Alignment(vertical="top", wrap_text=True)
+
+    if fill_color:
+        cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
+
 
 
 
