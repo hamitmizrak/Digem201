@@ -561,7 +561,6 @@ def save_results_txt(base_name, score, total, percent, user_results):
 
 #############################################################################
 # CSV CREATE
-
 # save_result_csv dosyasını fonksiyonun
 # Sonuçları tablo yapısında '.csv' olarak kaydeder
 # böylece Excel, Google Sheets veya veri analizi araçlarında kolaylıkla açılabilir
@@ -630,7 +629,6 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
         run.font.color.rgb= RGBColor(*color)
 
     return paragraph
-
 
 # save_results_docx fonksiyonu:
 # Quiz sonucunu Microsoft Word tarafından açılabilen '.docx' formatından kaydetmek
@@ -717,9 +715,10 @@ def save_results_docx(base_name,score,total, percent,user_results):
     document.save(docx_path)
     return docx_path
 
-
+################################################################################
+# EXCEL CREATE
 # set_excel_cell_style fonksiyonu
-# Execel raporundaki başlık ve veri hücrelerinini daha okunabilir görünmesi için
+# Excel raporundaki başlık ve veri hücrelerinini daha okunabilir görünmesi için
 # ortak font, kenarlık, hizalama, dolgu ayarlarını uygular
 def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
     thin_border= Border(
@@ -737,6 +736,10 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
     if fill_color:
         cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
 
+# set_excel_style fonksiyonu:
+# Excel rapoundaki başlık ve veri hüxrelerinin daha okunabilir görünmesi için
+# ortak font, kenarlık, hizalama ve dolgu ayarlarını uygular
+def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
 
 
 
