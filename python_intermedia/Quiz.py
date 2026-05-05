@@ -755,15 +755,7 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
         cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
 
 
-
-
-
-
-
-
-
-
-
+##################################################################################
 # get_option_css_class fonksiyonu:
 # HTML raporunda her seçeneğin hangi renkle/biçimle gösterileceğini belirler.
 #
