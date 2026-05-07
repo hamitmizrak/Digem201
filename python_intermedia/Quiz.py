@@ -769,15 +769,32 @@ def autofit_excel_columns(worksheet, max_width=45):
 
 
 # save_results_xlsx fonksiyonu:
-# Quiz sonucu Microsoft Excel tarafında açılabilen '.xlsx' formatında kaydeder.
+# Quiz sonucunu Microsoft Excel tarafından açılabilen '.xlsx' formatında kaydeder.
 # Dosyada iki sayfa vardır:
 # 1) Özet
 # 2) Detaylar
-# Amaç: Sonuçların filtrelebilir, tablolaştırabilir olsun ve analiz edebilir olsun
-# def save_results_xlsx(base_name, score, total, percent, user_results):
+# Amaç: sonuçların filtrelenebilir, tablolaştırılabilir ve analiz edilebilir olmasıdır.
+def save_results_xlsx(base_name, score, total, percent, user_results):
+    xlsx_path = base_name.with_suffix(".xlsx")
+
+    # Yeni Excel çalışma kitabı oluşturulur.
+    workbook = Workbook()
+
+    # Varsayılan sayfa özet sayfası olarak yeniden adlandırılır.
+    summary_sheet = workbook.active
+    summary_sheet.title = "Özet"
+
+    # Detaylar için ikinci sayfa oluşturulur.
+    details_sheet = workbook.create_sheet("Detaylar")
+
+    # Özet sayfası başlığı.
+    summary_sheet["A1"] = "Python Quiz Sonuç Raporu"
+    summary_sheet["A1"].font = Font(bold=True, size=16, color="111827")
+    summary_sheet.merge_cells("A1:B1")
 
 #############################################################################
 # XML CREATE
+
 
 ##################################################################################
 # get_option_css_class fonksiyonu:

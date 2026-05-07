@@ -1,5 +1,6 @@
 #  requirements.txt Dosyasını Yükleme ve Kullanma
 #  pip install python-docx
+#  pip install openpyxl
 #  pip install -r requirements.txt
 
 # Mevcut Bağımlılıkları Kaydetme: Eğer proje ortamınızda zaten yüklenmiş bağımlılıklar varsa, pip freeze ile bunları kaydedebilirsiniz:
