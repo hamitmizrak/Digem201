@@ -3,6 +3,9 @@
 #  pip install openpyxl
 #  pip install -r requirements.txt
 
+#  rmdir /s /q .venv
+#     py -m venv .venv
+
 # Mevcut Bağımlılıkları Kaydetme: Eğer proje ortamınızda zaten yüklenmiş bağımlılıklar varsa, pip freeze ile bunları kaydedebilirsiniz:
 # pip freeze > requirements.txt
 
@@ -28,6 +31,12 @@ dataclasses~=0.6
 Django~=3.2
 pycryptodome~=3.21.0
 
-python-docx>=1.2.0
-lxml>=5.3.0
-openpyxl>=3.1.5
+python-docx==1.2.0
+openpyxl==3.1.5
+
+# Windows DLL sorunu için binary wheel zorlanarak kurulmalıdır.
+# Python 3.9 - 3.13 için stabil lxml sürümü:
+lxml==5.3.2; python_version < "3.14"
+
+# Python 3.14 ve üzeri için daha yeni lxml sürümü:
+lxml==6.1.0; python_version >= "3.14"
