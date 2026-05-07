@@ -829,6 +829,48 @@ def save_results_xlsx(base_name, score, total, percent, user_results):
         set_excel_cell_style(cell, bold=True, fill_color="E5E7EB")
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
+
+    # Her soru sonucu detay sayfasına satır olarak eklenir.
+    for index, item in enumerate(user_results, start=1):
+        details_sheet.append([
+            index,
+            item["question"],
+            item["options"]["A"],
+            item["options"]["B"],
+            item["options"]["C"],
+            item["options"]["D"],
+            item["user_answer"],
+            item["correct_answer"],
+            "Doğru" if item["is_correct"] else "Yanlış",
+        ])
+
+    # Detay satırlarına stil ve sonuç durumuna göre dolgu uygulanır.
+    for row in details_sheet.iter_rows(min_row=2, max_row=details_sheet.max_row, min_col=1, max_col=len(headers)):
+        result_cell = row[-1]
+        row_fill = "DCFCE7" if result_cell.value == "Doğru" else "FEE2E2"
+        for cell in row:
+            set_excel_cell_style(cell, fill_color=row_fill)
+
+    # Filtreleme ve sabit başlık özellikleri kullanıcı deneyimini artırır.
+    details_sheet.auto_filter.ref = details_sheet.dimensions
+    details_sheet.freeze_panes = "A2"
+
+    # Kolon genişlikleri düzenlenir.
+    autofit_excel_columns(summary_sheet, max_width=35)
+    autofit_excel_columns(details_sheet, max_width=55)
+
+    # Bazı metin yoğun kolonlarda genişlik manuel olarak daha okunabilir tutulur.
+    details_sheet.column_dimensions["B"].width = 45
+    details_sheet.column_dimensions["C"].width = 35
+    details_sheet.column_dimensions["D"].width = 35
+    details_sheet.column_dimensions["E"].width = 35
+    details_sheet.column_dimensions["F"].width = 35
+
+
+    # Excel dosyası belirtilen yola kaydedilir.
+    workbook.save(xlsx_path)
+    return xlsx_path
+
 #############################################################################
 # XML CREATE
 
