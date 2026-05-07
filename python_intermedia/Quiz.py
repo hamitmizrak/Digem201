@@ -56,6 +56,12 @@ from datetime import datetime
 # nesne tabanlı güvenli yaklaşım sağlar.
 from pathlib import Path
 
+# zipfile modülü:
+# DOCX ve XLSX dosyaları teknik olarak XML dosyalarının ZIP paketi halinde saklanmış biçimidir.
+# Normalde Word için python-docx, Excel için openpyxl kullanılır.
+# Ancak bu paketler kurulu değilse bile temel Word/Excel dosyası üretmek için standart kütüphane desteği sağlar.
+import zipfile
+
 # txt, csv, html, docx
 # python-docx kütüphanesi
 # Microsoft Word  .docx
@@ -674,6 +680,132 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
     return paragraph
 
 
+
+# save_results_docx_fallback fonksiyonu:
+# python-docx veya onun arka plandaki lxml bağımlılığı kurulu değilse devreye girer.
+# DOCX dosyası, Office Open XML standardına göre ZIP içindeki XML dosyalarından oluşur.
+# Bu fonksiyon sade ama Word tarafından açılabilen temel bir .docx raporu üretir.
+# Amaç: Harici paket kurulmasa bile Word çıktısının tamamen kaybolmasını engellemektir.
+def save_results_docx_fallback(base_name, score, total, percent, user_results):
+    docx_path = base_name.with_suffix(".docx")
+
+    # Word XML içine yazılacak özel karakterleri güvenli hale getirir.
+    def word_escape(value):
+        return html.escape("" if value is None else str(value), quote=False)
+
+    # Tek bir Word paragrafını XML olarak oluşturur.
+    def word_paragraph(text, bold=False, color=None, center=False):
+        run_properties = []
+        paragraph_properties = []
+
+        if bold:
+            run_properties.append("<w:b/>")
+
+        if color:
+            if isinstance(color, tuple):
+                color_hex = f"{color[0]:02X}{color[1]:02X}{color[2]:02X}"
+            else:
+                color_hex = str(color)
+            run_properties.append(f'<w:color w:val="{color_hex}"/>')
+
+        if center:
+            paragraph_properties.append('<w:jc w:val="center"/>')
+
+        ppr_xml = f"<w:pPr>{''.join(paragraph_properties)}</w:pPr>" if paragraph_properties else ""
+        rpr_xml = f"<w:rPr>{''.join(run_properties)}</w:rPr>" if run_properties else ""
+
+        # xml:space="preserve" ile baştaki/sondaki boşlukların korunması sağlanır.
+        return f"<w:p>{ppr_xml}<w:r>{rpr_xml}<w:t xml:space=\"preserve\">{word_escape(text)}</w:t></w:r></w:p>"
+
+    # Word raporu için paragraf listesi hazırlanır.
+    paragraphs = []
+    paragraphs.append(word_paragraph("Python Quiz Sonuç Raporu", bold=True, center=True))
+    paragraphs.append(word_paragraph(f"Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", bold=True))
+    paragraphs.append(word_paragraph("Genel Özet", bold=True))
+    paragraphs.append(word_paragraph(f"Doğru Sayısı: {score}"))
+    paragraphs.append(word_paragraph(f"Yanlış Sayısı: {total - score}"))
+    paragraphs.append(word_paragraph(f"Toplam Soru: {total}"))
+    paragraphs.append(word_paragraph(f"Başarı Oranı: %{percent:.2f}"))
+    paragraphs.append(word_paragraph("Soru Detayları", bold=True))
+
+    # Her soru için detaylı Word içeriği eklenir.
+    for index, item in enumerate(user_results, start=1):
+        status_text = "Doğru" if item["is_correct"] else "Yanlış"
+        status_color = (22, 101, 52) if item["is_correct"] else (153, 27, 27)
+
+        paragraphs.append(word_paragraph(f"Soru {index} - {status_text}", bold=True, color=status_color))
+        paragraphs.append(word_paragraph(item["question"], bold=True))
+
+        for option_key, option_value in item["options"].items():
+            option_suffix = []
+            if option_key == item["user_answer"]:
+                option_suffix.append("İşaretlediğin")
+            if option_key == item["correct_answer"]:
+                option_suffix.append("Doğru Cevap")
+
+            suffix_text = f"  [{' | '.join(option_suffix)}]" if option_suffix else ""
+            paragraphs.append(word_paragraph(f"{option_key}) {option_value}{suffix_text}"))
+
+        paragraphs.append(word_paragraph(f"İşaretlenen cevap: {item['user_answer']}) {item['options'][item['user_answer']]}"))
+        paragraphs.append(word_paragraph(f"Doğru cevap: {item['correct_answer']}) {item['options'][item['correct_answer']]}"))
+        paragraphs.append(word_paragraph("-" * 70))
+
+    # Word ana doküman XML içeriği hazırlanır.
+    document_xml = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+    <w:body>
+        {''.join(paragraphs)}
+        <w:sectPr>
+            <w:pgSz w:w="11906" w:h="16838"/>
+            <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
+        </w:sectPr>
+    </w:body>
+</w:document>'''
+
+    # DOCX paketinin içerik tipleri tanımlanır.
+    content_types_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+    <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+    <Default Extension="xml" ContentType="application/xml"/>
+    <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+    <Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+    <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
+</Types>'''
+
+    # DOCX ana ilişki dosyası hazırlanır.
+    rels_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+    <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+    <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
+</Relationships>'''
+
+    # DOCX belge özellikleri hazırlanır.
+    core_xml = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dc:title>Python Quiz Sonuç Raporu</dc:title>
+    <dc:creator>Python Quiz Uygulaması</dc:creator>
+    <cp:lastModifiedBy>Python Quiz Uygulaması</cp:lastModifiedBy>
+    <dcterms:created xsi:type="dcterms:W3CDTF">{datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}</dcterms:created>
+    <dcterms:modified xsi:type="dcterms:W3CDTF">{datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')}</dcterms:modified>
+</cp:coreProperties>'''
+
+    app_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
+    <Application>Python Quiz Uygulaması</Application>
+</Properties>'''
+
+    # Tüm XML parçaları .docx zip paketi içine yazılır.
+    with zipfile.ZipFile(docx_path, "w", zipfile.ZIP_DEFLATED) as docx_zip:
+        docx_zip.writestr("[Content_Types].xml", content_types_xml)
+        docx_zip.writestr("_rels/.rels", rels_xml)
+        docx_zip.writestr("word/document.xml", document_xml)
+        docx_zip.writestr("docProps/core.xml", core_xml)
+        docx_zip.writestr("docProps/app.xml", app_xml)
+
+    return docx_path
+
+
 # save_results_docx fonksiyonu:
 # Quiz sonucunu Microsoft Word tarafından açılabilen '.docx' formatından kaydetmek
 # Bu raporda önce özet bilgiler, sonra her sorunun detaylı cevabı yer alır.
@@ -681,12 +813,12 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
 def save_results_docx(base_name, score, total, percent, user_results):
     docx_path = base_name.with_suffix(".docx")
 
-    # python-docx kurulmamışsa Word dosyası üretilemez.
-    # Bu durumda programı durdurmak yerine kullanıcıya uyarı verilir.
+    # python-docx kurulmamışsa standart Python fallback sistemi devreye girer.
+    # Böylece Word çıktısı tamamen iptal edilmez, sade bir .docx raporu yine üretilir.
     if Document is None:
-        print("Uyarı: Word raporu oluşturulamadı. Gerekli paket: python-docx")
-        print("Kurulum: python -m pip install python-docx lxml")
-        return None
+        print("Uyarı: python-docx/lxml bulunamadı. Standart Python fallback ile temel Word raporu oluşturuluyor.")
+        print("Daha gelişmiş Word biçimlendirmesi için kurulum: python -m pip install python-docx lxml")
+        return save_results_docx_fallback(base_name, score, total, percent, user_results)
 
     # Yeni bir word dokümanı oluşturmak
     document = Document()
@@ -825,6 +957,153 @@ def autofit_excel_columns(worksheet, max_width=45):
         worksheet.column_dimensions[column_letter].width = min(max_length + 3, max_width)
 
 
+
+# save_results_xlsx_fallback fonksiyonu:
+# openpyxl kurulu değilse devreye girer.
+# XLSX dosyası da DOCX gibi ZIP paketi içindeki XML dosyalarından oluşur.
+# Bu fonksiyon sade ama Excel tarafından açılabilen temel bir .xlsx raporu üretir.
+# Amaç: Harici paket kurulmasa bile Excel çıktısının tamamen kaybolmasını engellemektir.
+def save_results_xlsx_fallback(base_name, score, total, percent, user_results):
+    xlsx_path = base_name.with_suffix(".xlsx")
+
+    # Excel hücre referansı için kolon numarasını harfe çevirir.
+    # Örneğin: 1 -> A, 2 -> B, 27 -> AA
+    def excel_column_letter(column_number):
+        letters = ""
+        while column_number:
+            column_number, remainder = divmod(column_number - 1, 26)
+            letters = chr(65 + remainder) + letters
+        return letters
+
+    # XML içine yazılacak özel karakterleri güvenli hale getirir.
+    def excel_escape(value):
+        return html.escape("" if value is None else str(value), quote=False)
+
+    # Hücre XML içeriğini üretir.
+    def excel_cell(row_number, column_number, value):
+        cell_reference = f"{excel_column_letter(column_number)}{row_number}"
+
+        # Sayısal değerlerde Excel'in sayı tipi kullanılabilir.
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return f'<c r="{cell_reference}"><v>{value}</v></c>'
+
+        # Metin değerleri inline string olarak yazılır.
+        return f'<c r="{cell_reference}" t="inlineStr"><is><t>{excel_escape(value)}</t></is></c>'
+
+    # Satır XML içeriğini üretir.
+    def excel_row(row_number, values):
+        cells = []
+        for column_number, value in enumerate(values, start=1):
+            cells.append(excel_cell(row_number, column_number, value))
+        return f'<row r="{row_number}">{"".join(cells)}</row>'
+
+    # Sayfa XML içeriğini üretir.
+    def worksheet_xml(rows):
+        row_xml = []
+        for row_number, values in enumerate(rows, start=1):
+            row_xml.append(excel_row(row_number, values))
+
+        return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+    <sheetData>
+        {''.join(row_xml)}
+    </sheetData>
+</worksheet>'''
+
+    # Özet sayfası verileri hazırlanır.
+    summary_rows = [
+        ["Python Quiz Sonuç Raporu"],
+        [],
+        ["Tarih", datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+        ["Doğru Sayısı", score],
+        ["Yanlış Sayısı", total - score],
+        ["Toplam Soru", total],
+        ["Başarı Oranı", f"%{percent:.2f}"],
+    ]
+
+    # Detay sayfası başlıkları hazırlanır.
+    detail_rows = [[
+        "Soru No",
+        "Soru",
+        "A Şıkkı",
+        "B Şıkkı",
+        "C Şıkkı",
+        "D Şıkkı",
+        "İşaretlenen Cevap",
+        "Doğru Cevap",
+        "Sonuç",
+    ]]
+
+    # Her soru sonucu detay sayfasına satır olarak eklenir.
+    for index, item in enumerate(user_results, start=1):
+        detail_rows.append([
+            index,
+            item["question"],
+            item["options"]["A"],
+            item["options"]["B"],
+            item["options"]["C"],
+            item["options"]["D"],
+            item["user_answer"],
+            item["correct_answer"],
+            "Doğru" if item["is_correct"] else "Yanlış",
+        ])
+
+    # XLSX paketinin içerik tipleri tanımlanır.
+    content_types_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+    <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+    <Default Extension="xml" ContentType="application/xml"/>
+    <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+    <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
+    <Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
+    <Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+</Types>'''
+
+    # XLSX ana ilişki dosyası hazırlanır.
+    rels_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>'''
+
+    # Workbook içinde iki sayfa tanımlanır: Özet ve Detaylar.
+    workbook_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <sheets>
+        <sheet name="Özet" sheetId="1" r:id="rId1"/>
+        <sheet name="Detaylar" sheetId="2" r:id="rId2"/>
+    </sheets>
+</workbook>'''
+
+    workbook_rels_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
+    <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>
+    <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>'''
+
+    # Temel stiller dosyası hazırlanır.
+    styles_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+    <fonts count="1"><font><sz val="11"/><name val="Calibri"/></font></fonts>
+    <fills count="1"><fill><patternFill patternType="none"/></fill></fills>
+    <borders count="1"><border/></borders>
+    <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+    <cellXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/></cellXfs>
+</styleSheet>'''
+
+    # Tüm XML parçaları .xlsx zip paketi içine yazılır.
+    with zipfile.ZipFile(xlsx_path, "w", zipfile.ZIP_DEFLATED) as xlsx_zip:
+        xlsx_zip.writestr("[Content_Types].xml", content_types_xml)
+        xlsx_zip.writestr("_rels/.rels", rels_xml)
+        xlsx_zip.writestr("xl/workbook.xml", workbook_xml)
+        xlsx_zip.writestr("xl/_rels/workbook.xml.rels", workbook_rels_xml)
+        xlsx_zip.writestr("xl/styles.xml", styles_xml)
+        xlsx_zip.writestr("xl/worksheets/sheet1.xml", worksheet_xml(summary_rows))
+        xlsx_zip.writestr("xl/worksheets/sheet2.xml", worksheet_xml(detail_rows))
+
+    return xlsx_path
+
+
 # save_results_xlsx fonksiyonu:
 # Quiz sonucunu Microsoft Excel tarafından açılabilen '.xlsx' formatında kaydeder.
 # Dosyada iki sayfa vardır:
@@ -834,12 +1113,12 @@ def autofit_excel_columns(worksheet, max_width=45):
 def save_results_xlsx(base_name, score, total, percent, user_results):
     xlsx_path = base_name.with_suffix(".xlsx")
 
-    # openpyxl kurulmamışsa Excel dosyası üretilemez.
-    # Bu durumda programı durdurmak yerine kullanıcıya uyarı verilir.
+    # openpyxl kurulmamışsa standart Python fallback sistemi devreye girer.
+    # Böylece Excel çıktısı tamamen iptal edilmez, sade bir .xlsx raporu yine üretilir.
     if Workbook is None:
-        print("Uyarı: Excel raporu oluşturulamadı. Gerekli paket: openpyxl")
-        print("Kurulum: python -m pip install openpyxl")
-        return None
+        print("Uyarı: openpyxl bulunamadı. Standart Python fallback ile temel Excel raporu oluşturuluyor.")
+        print("Daha gelişmiş Excel biçimlendirmesi için kurulum: python -m pip install openpyxl")
+        return save_results_xlsx_fallback(base_name, score, total, percent, user_results)
 
     # Yeni Excel çalışma kitabı oluşturulur.
     workbook = Workbook()
