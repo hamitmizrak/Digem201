@@ -792,6 +792,43 @@ def save_results_xlsx(base_name, score, total, percent, user_results):
     summary_sheet["A1"].font = Font(bold=True, size=16, color="111827")
     summary_sheet.merge_cells("A1:B1")
 
+    summary_data = [
+        ("Tarih", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+        ("Doğru Sayısı", score),
+        ("Yanlış Sayısı", total - score),
+        ("Toplam Soru", total),
+        ("Başarı Oranı", f"%{percent:.2f}"),
+    ]
+
+    # Özet bilgileri satır satır yazılır.
+    for row_index, (label, value) in enumerate(summary_data, start=3):
+        summary_sheet.cell(row=row_index, column=1, value=label)
+        summary_sheet.cell(row=row_index, column=2, value=value)
+
+    # Özet sayfasında stil uygulanır.
+    for row in summary_sheet.iter_rows(min_row=3, max_row=7, min_col=1, max_col=2):
+        for cell in row:
+            set_excel_cell_style(cell, bold=cell.column == 1, fill_color="F9FAFB")
+
+    # Detay sayfası başlıkları.
+    headers = [
+        "Soru No",
+        "Soru",
+        "A Şıkkı",
+        "B Şıkkı",
+        "C Şıkkı",
+        "D Şıkkı",
+        "İşaretlenen Cevap",
+        "Doğru Cevap",
+        "Sonuç",
+    ]
+    details_sheet.append(headers)
+
+    # Başlık satırına koyu ve kurumsal görünümlü stil uygulanır.
+    for cell in details_sheet[1]:
+        set_excel_cell_style(cell, bold=True, fill_color="E5E7EB")
+        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
 #############################################################################
 # XML CREATE
 
