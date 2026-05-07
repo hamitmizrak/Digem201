@@ -1,0 +1,109 @@
+PYTHON QUIZ SONUÇ RAPORU
+======================================================================
+Tarih          : 2026-05-07 15:58:05
+Doğru sayısı   : 7
+Yanlış sayısı  : 13
+Toplam soru    : 20
+Başarı Oranı   : 35.00
+======================================================================
+
+Soru   1: Python'da liste veri tipi hangisidir?
+İşaretlenen cevap :  C) [1,2,3]
+Doğru cevap       :  C) [1,2,3]
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   2: def anahtar kelimesi ne için kullanılır?
+İşaretlenen cevap :  C) Fonksiyon tanımlamak için
+Doğru cevap       :  C) Fonksiyon tanımlamak için
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   3: Python'da yorum satırı nasıl yazılır?
+İşaretlenen cevap :  C) # yorum
+Doğru cevap       :  C) # yorum
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   4: Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?
+İşaretlenen cevap :  C) print()
+Doğru cevap       :  C) print()
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   5: Aşağıdakilerden hangisi sözlük veri tipidir?
+İşaretlenen cevap :  A) [1,2]
+Doğru cevap       :  C) {'ad':'Ali'}
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   6: Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?
+İşaretlenen cevap :  A) run quiz.py
+Doğru cevap       :  B) python quiz.py
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   7: int('25') ifadesinin sonucu nedir?
+İşaretlenen cevap :  A) 25
+Doğru cevap       :  A) 25
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   8: bool veri tipinde doğru değer hangisidir?
+İşaretlenen cevap :  A) true
+Doğru cevap       :  C) True
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   9: Aşağıdakilerden hangisi doğru karşılaştırmadır?
+İşaretlenen cevap :  A) 5 = 5
+Doğru cevap       :  B) 5 == 5
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   10: for döngüsü ne için kullanılır?
+İşaretlenen cevap :  A) Karşılaştırma yapmak için
+Doğru cevap       :  B) Tekrar eden işlemler için
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   11: append() metodu genelde hangi veri tipiyle kullanılır?
+İşaretlenen cevap :  A) list
+Doğru cevap       :  A) list
+Durum             :  Doğru
+----------------------------------------------------------------------
+Soru   12: Python'da metin veri tipi hangisidir?
+İşaretlenen cevap :  A) int
+Doğru cevap       :  B) str
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   13: Python büyük-küçük harfe duyarlı mıdır?
+İşaretlenen cevap :  A) Hayır
+Doğru cevap       :  B) Evet
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   14: input() fonksiyonu ne işe yarar?
+İşaretlenen cevap :  A) Ekrana yazı yazdırır
+Doğru cevap       :  B) Kullanıcıdan veri alır
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   15: len([1,2,3]) sonucu kaçtır?
+İşaretlenen cevap :  A) 2
+Doğru cevap       :  B) 3
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   16: Python dosya uzantısı hangisidir?
+İşaretlenen cevap :  A) .java
+Doğru cevap       :  B) .py
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   17: Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?
+İşaretlenen cevap :  A) 1sayi = 5
+Doğru cevap       :  C) sayi1 = 5
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   18: Python'da bir modülü projeye eklemek için hangisi kullanılır?
+İşaretlenen cevap :  A) using
+Doğru cevap       :  D) import
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   19: 5 + 3 * 2 işleminin sonucu kaçtır?
+İşaretlenen cevap :  A) 16
+Doğru cevap       :  B) 11
+Durum             :  Yanlış
+----------------------------------------------------------------------
+Soru   20: Aşağıdakilerden hangisi koşul ifadesidir?
+İşaretlenen cevap :  B) if
+Doğru cevap       :  B) if
+Durum             :  Doğru
+----------------------------------------------------------------------

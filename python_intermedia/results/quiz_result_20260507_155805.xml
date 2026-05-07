@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<quiz_result>
+    <summary>
+        <date>2026-05-07 15:58:05</date>
+        <score>7</score>
+        <wrong>13</wrong>
+        <total>20</total>
+        <percent>35.00</percent>
+    </summary>
+    <questions>
+        <question no="1" result="correct">
+            <text>Python'da liste veri tipi hangisidir?</text>
+            <options>
+                <option key="A" is_user_answer="false" is_correct_answer="false">{1,2,3}</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">(1,2,3)</option>
+                <option key="C" is_user_answer="true" is_correct_answer="true">[1,2,3]</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">&lt;1,2,3&gt;</option>
+            </options>
+            <user_answer>C</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="2" result="correct">
+            <text>def anahtar kelimesi ne için kullanılır?</text>
+            <options>
+                <option key="A" is_user_answer="false" is_correct_answer="false">Sınıf oluşturmak için</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">Modül çağırmak için</option>
+                <option key="C" is_user_answer="true" is_correct_answer="true">Fonksiyon tanımlamak için</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">Dosya kapatmak için</option>
+            </options>
+            <user_answer>C</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="3" result="correct">
+            <text>Python'da yorum satırı nasıl yazılır?</text>
+            <options>
+                <option key="A" is_user_answer="false" is_correct_answer="false">// yorum</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">/* yorum */</option>
+                <option key="C" is_user_answer="true" is_correct_answer="true"># yorum</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">&lt;!-- yorum --&gt;</option>
+            </options>
+            <user_answer>C</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="4" result="correct">
+            <text>Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?</text>
+            <options>
+                <option key="A" is_user_answer="false" is_correct_answer="false">echo()</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">printf()</option>
+                <option key="C" is_user_answer="true" is_correct_answer="true">print()</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">write()</option>
+            </options>
+            <user_answer>C</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="5" result="wrong">
+            <text>Aşağıdakilerden hangisi sözlük veri tipidir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">[1,2]</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">(1,2)</option>
+                <option key="C" is_user_answer="false" is_correct_answer="true">{'ad':'Ali'}</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">&lt;ad:Ali&gt;</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="6" result="wrong">
+            <text>Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">run quiz.py</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">python quiz.py</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">start quiz.py</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">open quiz.py</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="7" result="correct">
+            <text>int('25') ifadesinin sonucu nedir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="true">25</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">'25'</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">Hata verir</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">25.0</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>A</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="8" result="wrong">
+            <text>bool veri tipinde doğru değer hangisidir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">true</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">TRUE</option>
+                <option key="C" is_user_answer="false" is_correct_answer="true">True</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">dogru</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="9" result="wrong">
+            <text>Aşağıdakilerden hangisi doğru karşılaştırmadır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">5 = 5</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">5 == 5</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">5 === 5</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">5 := 5</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="10" result="wrong">
+            <text>for döngüsü ne için kullanılır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">Karşılaştırma yapmak için</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">Tekrar eden işlemler için</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">Sadece sayı toplamak için</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">Fonksiyon silmek için</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="11" result="correct">
+            <text>append() metodu genelde hangi veri tipiyle kullanılır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="true">list</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">int</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">float</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">tuple</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>A</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+        <question no="12" result="wrong">
+            <text>Python'da metin veri tipi hangisidir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">int</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">str</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">bool</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">float</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="13" result="wrong">
+            <text>Python büyük-küçük harfe duyarlı mıdır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">Hayır</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">Evet</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">Sadece sayılarda</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">Sadece fonksiyonlarda</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="14" result="wrong">
+            <text>input() fonksiyonu ne işe yarar?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">Ekrana yazı yazdırır</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">Kullanıcıdan veri alır</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">Dosya açar</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">Liste sıralar</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="15" result="wrong">
+            <text>len([1,2,3]) sonucu kaçtır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">2</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">3</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">4</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">1</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="16" result="wrong">
+            <text>Python dosya uzantısı hangisidir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">.java</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">.py</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">.html</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">.js</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="17" result="wrong">
+            <text>Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">1sayi = 5</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">sayi-1 = 5</option>
+                <option key="C" is_user_answer="false" is_correct_answer="true">sayi1 = 5</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">class = 5</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>C</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="18" result="wrong">
+            <text>Python'da bir modülü projeye eklemek için hangisi kullanılır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">using</option>
+                <option key="B" is_user_answer="false" is_correct_answer="false">package</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">include</option>
+                <option key="D" is_user_answer="false" is_correct_answer="true">import</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>D</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="19" result="wrong">
+            <text>5 + 3 * 2 işleminin sonucu kaçtır?</text>
+            <options>
+                <option key="A" is_user_answer="true" is_correct_answer="false">16</option>
+                <option key="B" is_user_answer="false" is_correct_answer="true">11</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">13</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">10</option>
+            </options>
+            <user_answer>A</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>false</is_correct>
+        </question>
+        <question no="20" result="correct">
+            <text>Aşağıdakilerden hangisi koşul ifadesidir?</text>
+            <options>
+                <option key="A" is_user_answer="false" is_correct_answer="false">for</option>
+                <option key="B" is_user_answer="true" is_correct_answer="true">if</option>
+                <option key="C" is_user_answer="false" is_correct_answer="false">def</option>
+                <option key="D" is_user_answer="false" is_correct_answer="false">import</option>
+            </options>
+            <user_answer>B</user_answer>
+            <correct_answer>B</correct_answer>
+            <is_correct>true</is_correct>
+        </question>
+    </questions>
+</quiz_result>

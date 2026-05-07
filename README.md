@@ -41,6 +41,20 @@ Alt + 1 basalım
 ```
 
 
+# Çalıştırma Sırası
+```sh 
+pip install python-docx
+pip install openpyxl
+
+rmdir /s /q .venv
+py -m venv .venv
+
+pip install -r requirements.txt
+```
+---
+
+
+
 ### Run
 ```sh
 pip install python-docx
