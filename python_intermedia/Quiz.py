@@ -5,7 +5,7 @@ Amaç:
 - Soruları CSV dosyasından okumak
 - Kullanıcıya soruları sırayla sormak
 - Cevapları kontrol etmek
-- Sonuçları TXT, CSV ve HTML formatında raporlamak
+- Sonuçları TXT, CSV, HTML, Word, Excel ve XML formatında raporlamak
 - Soruları rastgele karıştırarak daha dinamik bir deneyim sunmak
 
 Not:
@@ -26,6 +26,16 @@ import csv
 # Örneğin '<', '>', '&' gibi karakterler HTML yapısını bozmasın diye escape edilir.
 # Bu sayede HTML raporunda soru ve şık metinleri güvenli şekilde gösterilir.
 import html
+
+# xml.etree.ElementTree modülü:
+# Python standart kütüphanesi içinde gelir.
+# Ekstra kurulum gerektirmez.
+# Quiz sonuçlarını .xml formatında dışarı aktarmak için kullanılır.
+import xml.etree.ElementTree as ET
+
+# xml.dom.minidom modülü:
+# XML çıktısını okunabilir, girintili ve düzenli hale getirmek için kullanılır.
+from xml.dom import minidom
 
 # random modülü:
 # Rastgelelik gerektiren işlemlerde kullanılır.
@@ -50,18 +60,55 @@ from pathlib import Path
 # python-docx kütüphanesi
 # Microsoft Word  .docx
 # pip install python-docx
-from docx import Document
-from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, RGBColor
+# Not:
+# Bu importlar try/except içinde alınmıştır.
+# Amaç: python-docx veya lxml kurulu değilse programın tamamen çökmesini engellemek.
+# Paketler doğru kurulursa Word çıktısı normal şekilde üretilecektir.
+try:
+    from docx import Document
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Pt, RGBColor
+except ModuleNotFoundError:
+    Document = None
+    WD_TABLE_ALIGNMENT = None
+    WD_ALIGN_PARAGRAPH = None
+    Pt = None
+    RGBColor = None
+except ImportError:
+    Document = None
+    WD_TABLE_ALIGNMENT = None
+    WD_ALIGN_PARAGRAPH = None
+    Pt = None
+    RGBColor = None
 
 # txt, csv, html, docx, xlsx, .xml
 # openpyxl kütüphanesi (Excel)
 # Microsoft Excel  .xlsx
 # pip install openpyxl
-from openpyxl import Workbook
-from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
-from openpyxl.utils import get_column_letter
+# Not:
+# Bu importlar try/except içinde alınmıştır.
+# Amaç: openpyxl kurulu değilse TXT, CSV, HTML ve XML çıktılarının yine de üretilmesidir.
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    from openpyxl.utils import get_column_letter
+except ModuleNotFoundError:
+    Workbook = None
+    Alignment = None
+    Border = None
+    Font = None
+    PatternFill = None
+    Side = None
+    get_column_letter = None
+except ImportError:
+    Workbook = None
+    Alignment = None
+    Border = None
+    Font = None
+    PatternFill = None
+    Side = None
+    get_column_letter = None
 
 # BASE_DIR:
 # Bu Python dosyasının bulunduğu klasörü temsil eder.
@@ -634,6 +681,13 @@ def add_docx_paragraph(document, text, bold=False, font_size=11, color=None):
 def save_results_docx(base_name, score, total, percent, user_results):
     docx_path = base_name.with_suffix(".docx")
 
+    # python-docx kurulmamışsa Word dosyası üretilemez.
+    # Bu durumda programı durdurmak yerine kullanıcıya uyarı verilir.
+    if Document is None:
+        print("Uyarı: Word raporu oluşturulamadı. Gerekli paket: python-docx")
+        print("Kurulum: python -m pip install python-docx lxml")
+        return None
+
     # Yeni bir word dokümanı oluşturmak
     document = Document()
 
@@ -693,7 +747,7 @@ def save_results_docx(base_name, score, total, percent, user_results):
             if option_key == item["correct_answer"]:
                 option_suffix.append("Doğru Cevap")
 
-            suffix_text = f" [{' | '.join(option_suffix)}" if option_suffix else ""
+            suffix_text = f"  [{' | '.join(option_suffix)}]" if option_suffix else ""
             add_docx_paragraph(document, f"{option_key}) {option_value}{suffix_text}")
 
         add_docx_paragraph(
@@ -736,6 +790,9 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
 # set_excel_style fonksiyonu:
 # Excel rapoundaki başlık ve veri hüxrelerinin daha okunabilir görünmesi için
 # ortak font, kenarlık, hizalama ve dolgu ayarlarını uygular
+# Not:
+# Bu fonksiyon önceki blokla aynı amaca hizmet eder.
+# Yorumlar korunmuştur, ancak eski sürümdeki yazım hataları düzeltilmiştir.
 def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000"):
     thin_border = Border(
         left=Side(style="thin", color="D1D5DB"),
@@ -744,9 +801,9 @@ def set_excel_cell_style(cell, bold=False, fill_color=None, font_color="000000")
         bottom=Side(style="thin", color="D1D5DB"),
     )
 
-    cell.font = Font(bold, color=font_color)
+    cell.font = Font(bold=bold, color=font_color)
     cell.border = thin_border
-    cell.aligment = Alignment(vertical="top", wrap_text=True)
+    cell.alignment = Alignment(vertical="top", wrap_text=True)
 
     if fill_color:
         cell.fill = PatternFill(fill_type="solid", fgColor=fill_color)
@@ -776,6 +833,13 @@ def autofit_excel_columns(worksheet, max_width=45):
 # Amaç: sonuçların filtrelenebilir, tablolaştırılabilir ve analiz edilebilir olmasıdır.
 def save_results_xlsx(base_name, score, total, percent, user_results):
     xlsx_path = base_name.with_suffix(".xlsx")
+
+    # openpyxl kurulmamışsa Excel dosyası üretilemez.
+    # Bu durumda programı durdurmak yerine kullanıcıya uyarı verilir.
+    if Workbook is None:
+        print("Uyarı: Excel raporu oluşturulamadı. Gerekli paket: openpyxl")
+        print("Kurulum: python -m pip install openpyxl")
+        return None
 
     # Yeni Excel çalışma kitabı oluşturulur.
     workbook = Workbook()
@@ -873,6 +937,58 @@ def save_results_xlsx(base_name, score, total, percent, user_results):
 
 #############################################################################
 # XML CREATE
+# save_results_xml fonksiyonu:
+# Quiz sonucunu XML formatında kaydeder.
+# XML, sistemler arası veri taşıma ve entegrasyon için kullanışlıdır.
+# Bu fonksiyon Python standart kütüphanesi ile çalışır, ekstra paket gerektirmez.
+def save_results_xml(base_name, score, total, percent, user_results):
+    xml_path = base_name.with_suffix(".xml")
+
+    # Kök XML etiketi oluşturulur.
+    root = ET.Element("quiz_result")
+
+    # Özet bilgiler için summary etiketi oluşturulur.
+    summary = ET.SubElement(root, "summary")
+    ET.SubElement(summary, "date").text = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ET.SubElement(summary, "score").text = str(score)
+    ET.SubElement(summary, "wrong").text = str(total - score)
+    ET.SubElement(summary, "total").text = str(total)
+    ET.SubElement(summary, "percent").text = f"{percent:.2f}"
+
+    # Soruların tutulacağı ana questions etiketi oluşturulur.
+    questions_element = ET.SubElement(root, "questions")
+
+    # Her kullanıcı sonucu XML içine ayrı question etiketi olarak eklenir.
+    for index, item in enumerate(user_results, start=1):
+        question_element = ET.SubElement(questions_element, "question", {
+            "no": str(index),
+            "result": "correct" if item["is_correct"] else "wrong",
+        })
+
+        ET.SubElement(question_element, "text").text = item["question"]
+
+        options_element = ET.SubElement(question_element, "options")
+        for option_key, option_value in item["options"].items():
+            option_element = ET.SubElement(options_element, "option", {
+                "key": option_key,
+                "is_user_answer": str(option_key == item["user_answer"]).lower(),
+                "is_correct_answer": str(option_key == item["correct_answer"]).lower(),
+            })
+            option_element.text = option_value
+
+        ET.SubElement(question_element, "user_answer").text = item["user_answer"]
+        ET.SubElement(question_element, "correct_answer").text = item["correct_answer"]
+        ET.SubElement(question_element, "is_correct").text = str(item["is_correct"]).lower()
+
+    # XML çıktısı önce byte olarak üretilir.
+    rough_xml = ET.tostring(root, encoding="utf-8")
+
+    # minidom ile daha okunabilir, girintili XML çıktısı hazırlanır.
+    pretty_xml = minidom.parseString(rough_xml).toprettyxml(indent="    ", encoding="utf-8")
+
+    # XML dosyası diske yazılır.
+    xml_path.write_bytes(pretty_xml)
+    return xml_path
 
 
 ##################################################################################
@@ -887,18 +1003,25 @@ def save_results_xlsx(base_name, score, total, percent, user_results):
 #
 # Bu fonksiyon yalnızca CSS sınıfı adı döndürür.
 def get_option_css_class(option_key, user_answer, correct_answer):
+    # Kullanıcı doğru şıkkı seçtiyse bu şık hem doğru hem seçili olarak gösterilir.
     if option_key == correct_answer and option_key == user_answer:
         return "option option-correct-selected"
+
+    # Kullanıcı yanlış cevap verdiyse doğru cevap yeşil şekilde ayrıca vurgulanır.
     if option_key == correct_answer:
-        return "option option-selected"
-    if option_key == correct_answer and option_key != user_answer:
+        return "option option-correct"
+
+    # Kullanıcının seçtiği ama yanlış olan şık kırmızı şekilde vurgulanır.
+    if option_key == user_answer and option_key != correct_answer:
         return "option option-wrong-selected"
+
+    # Diğer şıklar normal görünümde kalır.
     return "option"
 
 
 # save_all_results fonksiyonu:
 # Quiz tamamlandıktan sonra tüm rapor dosyalarını tek noktadan üretir.
-# TXT, CSV ve HTML dosyalarını oluşturur ve bunların yolunu döndürür.
+# TXT, CSV, HTML, Word, Excel ve XML dosyalarını oluşturur ve bunların yolunu döndürür.
 def save_all_results(score, total, user_results):
     # Başarı oranı yüzde olarak hesaplanacaktır.
     # total sıfır olursa hata olmaması için güvenli kontroller gereklidir
@@ -907,12 +1030,15 @@ def save_all_results(score, total, user_results):
     # Tüm dosyalarda kullanıalcak ortak temel isim üretilir.
     base_name = create_result_base_names()
 
-    # Üç farklı formatta rapor oluşturulur.
+    # Altı farklı formatta rapor oluşturulur.
     txt_file = save_results_txt(base_name, score, total, percent, user_results)
     csv_file = save_results_csv(base_name, score, total, percent, user_results)
     html_file = save_results_html(base_name, score, total, percent, user_results)
+    docx_file = save_results_docx(base_name, score, total, percent, user_results)
+    xlsx_file = save_results_xlsx(base_name, score, total, percent, user_results)
+    xml_file = save_results_xml(base_name, score, total, percent, user_results)
 
-    return txt_file, csv_file, html_file, percent
+    return txt_file, csv_file, html_file, docx_file, xlsx_file, xml_file, percent
 
 
 # show_final_summary fonksiyonu:
@@ -965,13 +1091,16 @@ def main():
         # 1 seçildiyse quiz başlatılır.
         if choice == "1":
             score, total, user_results = run_quiz(questions)
-            txt_file, csv_file, html_file, percent = save_all_results(score, total, user_results)
+            txt_file, csv_file, html_file, docx_file, xlsx_file, xml_file, percent = save_all_results(score, total, user_results)
 
             show_final_summary(score, total, percent)
             print("\nSonuç dosyaları oluşturuldu:")
-            print(f"TXT  : {txt_file}")
-            print(f"CSV  : {csv_file}")
-            print(f"HTML : {html_file}")
+            print(f"TXT   : {txt_file}")
+            print(f"CSV   : {csv_file}")
+            print(f"HTML  : {html_file}")
+            print(f"WORD  : {docx_file if docx_file else 'Oluşturulamadı - python-docx/lxml kurulumu gerekli'}")
+            print(f"EXCEL : {xlsx_file if xlsx_file else 'Oluşturulamadı - openpyxl kurulumu gerekli'}")
+            print(f"XML   : {xml_file}")
 
         # 2 seçildiyse toplam soru sayısı gösterilir.
         elif choice == "2":
